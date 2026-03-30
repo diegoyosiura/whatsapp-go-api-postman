@@ -213,6 +213,176 @@
 						},
 						"description": "Autentica o sysadmin e salva tokens nas variaveis sysadmin_access_token / sysadmin_refresh_token.\n\nUsa o mesmo endpoint POST /v1/iam/login — o sysadmin e diferenciado pela role no JWT, nao pelo endpoint.\n\n**Credencial:** admin@sistema.local / env SYSADMIN_PASSWORD"
 					}
+				},
+				{
+					"name": "[POST] Create Tenant",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status code 201', function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test('Content-Type application/json', function () {",
+									"    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
+									"});",
+									"",
+									"pm.test('Response possui estrutura de tenant', function () {",
+									"    const body = pm.response.json();",
+									"    pm.expect(body).to.have.property('id').that.is.a('string').and.not.empty;",
+									"    pm.expect(body).to.have.property('name').that.is.a('string').and.not.empty;",
+									"    pm.expect(body).to.have.property('plan_type').that.is.a('string');",
+									"    pm.expect(body).to.have.property('active', true);",
+									"});",
+									"",
+									"pm.test('Salva tenant_id para provisioning', function () {",
+									"    const body = pm.response.json();",
+									"    pm.environment.set('last_created_tenant_id', body.id);",
+									"});",
+									"",
+									"pm.test('X-Request-ID presente', function () {",
+									"    pm.expect(pm.response.headers.get('X-Request-Id')).to.be.a('string').and.not.empty;",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Nova Empresa\",\n    \"document\": \"98.765.432/0001-10\",\n    \"plan_type\": \"pro\",\n    \"max_agents\": 20,\n    \"max_waba_numbers\": 5\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/{{api_version}}/tenants",
+							"host": ["{{base_url}}"],
+							"path": ["{{api_version}}", "tenants"]
+						},
+						"description": "**Workflow Concierge — Passo 1:** Cria o tenant.\n\nO ID e salvo em `last_created_tenant_id` para uso no passo seguinte (Create Manager)."
+					}
+				},
+				{
+					"name": "[POST] Create Manager",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status code 201', function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test('Content-Type application/json', function () {",
+									"    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
+									"});",
+									"",
+									"pm.test('Response possui usuario gerente', function () {",
+									"    const body = pm.response.json();",
+									"    pm.expect(body).to.have.property('id').that.is.a('string').and.not.empty;",
+									"    pm.expect(body).to.have.property('email').that.is.a('string').and.not.empty;",
+									"    pm.expect(body).to.have.property('role', 'gerente');",
+									"    pm.expect(body).to.have.property('active', true);",
+									"});",
+									"",
+									"pm.test('Salva manager_id criado', function () {",
+									"    const body = pm.response.json();",
+									"    pm.environment.set('last_created_manager_id', body.id);",
+									"});",
+									"",
+									"pm.test('X-Request-ID presente', function () {",
+									"    pm.expect(pm.response.headers.get('X-Request-Id')).to.be.a('string').and.not.empty;",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "X-Tenant-ID",
+								"value": "{{last_created_tenant_id}}",
+								"description": "Tenant alvo — usa o ID do tenant criado no passo anterior"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"gerente@novaempresa.com\",\n    \"password\": \"senha1234\",\n    \"role\": \"gerente\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/{{api_version}}/iam/users",
+							"host": ["{{base_url}}"],
+							"path": ["{{api_version}}", "iam", "users"]
+						},
+						"description": "**Workflow Concierge — Passo 2:** Cria o gerente inicial do tenant.\n\nUsa header `X-Tenant-ID` com o `last_created_tenant_id` do passo anterior.\nSo o sysadmin pode criar usuarios com role gerente.\n\nO ID e salvo em `last_created_manager_id`."
+					}
+				},
+				{
+					"name": "[GET] Backoffice Dashboard",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status code 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Content-Type application/json', function () {",
+									"    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
+									"});",
+									"",
+									"pm.test('Response possui metricas globais', function () {",
+									"    const body = pm.response.json();",
+									"    pm.expect(body).to.have.property('tenants_total').that.is.a('number');",
+									"    pm.expect(body).to.have.property('conversations_total').that.is.a('number');",
+									"    pm.expect(body).to.have.property('conversations_open').that.is.a('number');",
+									"    pm.expect(body).to.have.property('per_tenant').that.is.an('array');",
+									"});",
+									"",
+									"pm.test('per_tenant tem estrutura correta', function () {",
+									"    const body = pm.response.json();",
+									"    if (body.per_tenant.length > 0) {",
+									"        const t = body.per_tenant[0];",
+									"        pm.expect(t).to.have.property('tenant_id');",
+									"        pm.expect(t).to.have.property('tenant_name');",
+									"        pm.expect(t).to.have.property('total');",
+									"        pm.expect(t).to.have.property('open');",
+									"    }",
+									"});",
+									"",
+									"pm.test('X-Request-ID presente', function () {",
+									"    pm.expect(pm.response.headers.get('X-Request-Id')).to.be.a('string').and.not.empty;",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/{{api_version}}/backoffice/dashboard",
+							"host": ["{{base_url}}"],
+							"path": ["{{api_version}}", "backoffice", "dashboard"]
+						},
+						"description": "Metricas globais do backoffice (sysadmin only).\n\nRetorna total de tenants, conversas totais/abertas e breakdown por tenant."
+					}
 				}
 			]
 		},
