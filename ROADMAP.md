@@ -5,11 +5,12 @@
 
 ---
 
-## Estado Atual: M1 Concluido — Auth
+## Estado Atual: M2 Concluido — Tenants + Users
 
-- Collection com folder Auth (4 requests: Login, Refresh, Logout, Me)
+- Collection com 4 folders, 13 requests
+- Folders concluidas: [Concierge] Backoffice, Auth, Tenants, Users
 - Collection-level scripts: auto-login global + Idempotency-Key + response time
-- Bearer Token herdado por todos os requests
+- Variable chaining: last_created_tenant_id, last_created_user_id
 - Environment configurado com 10 variaveis (6 originais + 4 sysadmin)
 - Governance completa (5 rules, 1 workflow, 1 skill)
 
@@ -68,12 +69,12 @@
 | 1.5.1 | Env vars sysadmin | Adicionar sysadmin_email, sysadmin_password, sysadmin_access_token, sysadmin_refresh_token | CONCLUIDO (e93857b) |
 | 1.5.2 | Login Sysadmin request | [POST] Login Sysadmin na pasta [Concierge] Backoffice | CONCLUIDO (57e3846) |
 
-### MILESTONE 2: Tenants + Users (8 requests)
+### MILESTONE 2: Tenants + Users (8 requests) ✓ CONCLUIDO (2566c61)
 
 | # | Task | Descricao | Status |
 |---|------|-----------|--------|
-| 2.1 | Folder Tenants | [POST] Create (sysadmin), [GET] List, [GET] Detail, [PUT] Update | PENDENTE |
-| 2.2 | Folder Users | [GET] List, [POST] Create, [PUT] Update, [DELETE] Deactivate | PENDENTE |
+| 2.1 | Folder Tenants | [POST] Create (sysadmin), [GET] List, [GET] Detail, [PUT] Update | CONCLUIDO |
+| 2.2 | Folder Users | [GET] List, [POST] Create, [PUT] Update, [DELETE] Deactivate | CONCLUIDO |
 
 ### MILESTONE 2.5: Concierge Backoffice (4 requests)
 
