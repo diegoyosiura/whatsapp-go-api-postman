@@ -432,6 +432,436 @@
 					}
 				}
 			]
+		},
+		{
+			"name": "Tenants",
+			"description": "Gestao de empresas (tenants). Todas as rotas sao sysadmin-only.\n\nO sysadmin ve todos os tenants. Gerentes nao tem acesso direto a estas rotas.",
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{sysadmin_access_token}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"// Auto-login sysadmin se token vazio",
+							"const token = pm.environment.get('sysadmin_access_token');",
+							"if (!token || token.trim() === '') {",
+							"    const baseUrl = pm.environment.get('base_url');",
+							"    const apiVersion = pm.environment.get('api_version');",
+							"    const email = pm.environment.get('sysadmin_email');",
+							"    const password = pm.environment.get('sysadmin_password');",
+							"    if (email && password) {",
+							"        pm.sendRequest({",
+							"            url: baseUrl + '/' + apiVersion + '/iam/login',",
+							"            method: 'POST',",
+							"            header: { 'Content-Type': 'application/json' },",
+							"            body: { mode: 'raw', raw: JSON.stringify({ email: email, password: password }) }",
+							"        }, function (err, res) {",
+							"            if (!err && res.code === 200) {",
+							"                const body = res.json();",
+							"                pm.environment.set('sysadmin_access_token', body.access_token);",
+							"                pm.environment.set('sysadmin_refresh_token', body.refresh_token);",
+							"                console.log('[Auto-Login Sysadmin] Token obtido');",
+							"            }",
+							"        });",
+							"    }",
+							"}"
+						]
+					}
+				}
+			],
+			"item": [
+				{
+					"name": "[POST] Create Tenant",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status code 201', function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test('Content-Type application/json', function () {",
+									"    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
+									"});",
+									"",
+									"pm.test('Response possui estrutura de tenant', function () {",
+									"    const body = pm.response.json();",
+									"    pm.expect(body).to.have.property('id').that.is.a('string').and.not.empty;",
+									"    pm.expect(body).to.have.property('name').that.is.a('string').and.not.empty;",
+									"    pm.expect(body).to.have.property('plan_type').that.is.a('string');",
+									"    pm.expect(body).to.have.property('active').that.is.a('boolean');",
+									"});",
+									"",
+									"pm.test('Salva tenant_id criado', function () {",
+									"    const body = pm.response.json();",
+									"    pm.environment.set('last_created_tenant_id', body.id);",
+									"});",
+									"",
+									"pm.test('X-Request-ID presente', function () {",
+									"    pm.expect(pm.response.headers.get('X-Request-Id')).to.be.a('string').and.not.empty;",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Empresa Teste\",\n    \"document\": \"12.345.678/0001-90\",\n    \"plan_type\": \"basic\",\n    \"max_agents\": 10,\n    \"max_waba_numbers\": 2\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/{{api_version}}/tenants",
+							"host": ["{{base_url}}"],
+							"path": ["{{api_version}}", "tenants"]
+						},
+						"description": "Cria um novo tenant (empresa gestora).\n\n**Sysadmin only.** O ID criado e salvo em `last_created_tenant_id`.\n\n**Plan types:** basic, pro, enterprise"
+					}
+				},
+				{
+					"name": "[GET] List Tenants",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status code 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Content-Type application/json', function () {",
+									"    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
+									"});",
+									"",
+									"pm.test('Response possui data array e total', function () {",
+									"    const body = pm.response.json();",
+									"    pm.expect(body).to.have.property('data').that.is.an('array');",
+									"    pm.expect(body).to.have.property('total').that.is.a('number');",
+									"});",
+									"",
+									"pm.test('X-Request-ID presente', function () {",
+									"    pm.expect(pm.response.headers.get('X-Request-Id')).to.be.a('string').and.not.empty;",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/{{api_version}}/tenants",
+							"host": ["{{base_url}}"],
+							"path": ["{{api_version}}", "tenants"]
+						},
+						"description": "Lista todos os tenants.\n\n**Sysadmin:** ve todos. **Gerente:** ve apenas o seu."
+					}
+				},
+				{
+					"name": "[GET] Get Tenant",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status code 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Content-Type application/json', function () {",
+									"    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
+									"});",
+									"",
+									"pm.test('Response possui estrutura de tenant', function () {",
+									"    const body = pm.response.json();",
+									"    pm.expect(body).to.have.property('id').that.is.a('string').and.not.empty;",
+									"    pm.expect(body).to.have.property('name').that.is.a('string');",
+									"    pm.expect(body).to.have.property('plan_type').that.is.a('string');",
+									"    pm.expect(body).to.have.property('active').that.is.a('boolean');",
+									"});",
+									"",
+									"pm.test('X-Request-ID presente', function () {",
+									"    pm.expect(pm.response.headers.get('X-Request-Id')).to.be.a('string').and.not.empty;",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/{{api_version}}/tenants/{{last_created_tenant_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["{{api_version}}", "tenants", "{{last_created_tenant_id}}"]
+						},
+						"description": "Retorna detalhe de um tenant.\n\nUsa `last_created_tenant_id` do Create anterior."
+					}
+				},
+				{
+					"name": "[PUT] Update Tenant",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status code 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Content-Type application/json', function () {",
+									"    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
+									"});",
+									"",
+									"pm.test('Response possui tenant atualizado', function () {",
+									"    const body = pm.response.json();",
+									"    pm.expect(body).to.have.property('id').that.is.a('string').and.not.empty;",
+									"    pm.expect(body).to.have.property('name').that.is.a('string');",
+									"    pm.expect(body).to.have.property('active').that.is.a('boolean');",
+									"});",
+									"",
+									"pm.test('X-Request-ID presente', function () {",
+									"    pm.expect(pm.response.headers.get('X-Request-Id')).to.be.a('string').and.not.empty;",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Empresa Teste Atualizada\",\n    \"plan_type\": \"pro\",\n    \"max_agents\": 25\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/{{api_version}}/tenants/{{last_created_tenant_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["{{api_version}}", "tenants", "{{last_created_tenant_id}}"]
+						},
+						"description": "Atualiza um tenant existente.\n\n**Sysadmin only.** Nao pode modificar o tenant de sistema (plan_type=system)."
+					}
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"description": "Gestao de usuarios dentro do tenant. Requer role gerente ou superior.\n\nGerente cria n1/n2 no proprio tenant. Sysadmin cria gerentes em qualquer tenant (via X-Tenant-ID).",
+			"item": [
+				{
+					"name": "[GET] List Users",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status code 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Content-Type application/json', function () {",
+									"    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
+									"});",
+									"",
+									"pm.test('Response possui data array e total', function () {",
+									"    const body = pm.response.json();",
+									"    pm.expect(body).to.have.property('data').that.is.an('array');",
+									"    pm.expect(body).to.have.property('total').that.is.a('number');",
+									"});",
+									"",
+									"pm.test('Cada usuario tem estrutura correta', function () {",
+									"    const body = pm.response.json();",
+									"    if (body.data.length > 0) {",
+									"        const user = body.data[0];",
+									"        pm.expect(user).to.have.property('id');",
+									"        pm.expect(user).to.have.property('email');",
+									"        pm.expect(user).to.have.property('role');",
+									"        pm.expect(user).to.have.property('active');",
+									"    }",
+									"});",
+									"",
+									"pm.test('X-Request-ID presente', function () {",
+									"    pm.expect(pm.response.headers.get('X-Request-Id')).to.be.a('string').and.not.empty;",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/{{api_version}}/iam/users",
+							"host": ["{{base_url}}"],
+							"path": ["{{api_version}}", "iam", "users"]
+						},
+						"description": "Lista usuarios do tenant do usuario autenticado.\n\n**Requer:** gerente ou superior.\n\n**Sysadmin:** pode usar header X-Tenant-ID para ver usuarios de outro tenant."
+					}
+				},
+				{
+					"name": "[POST] Create User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status code 201', function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test('Content-Type application/json', function () {",
+									"    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
+									"});",
+									"",
+									"pm.test('Response possui estrutura de usuario', function () {",
+									"    const body = pm.response.json();",
+									"    pm.expect(body).to.have.property('id').that.is.a('string').and.not.empty;",
+									"    pm.expect(body).to.have.property('email').that.is.a('string').and.not.empty;",
+									"    pm.expect(body).to.have.property('role').that.is.a('string');",
+									"    pm.expect(body).to.have.property('active', true);",
+									"});",
+									"",
+									"pm.test('Salva user_id criado', function () {",
+									"    const body = pm.response.json();",
+									"    pm.environment.set('last_created_user_id', body.id);",
+									"});",
+									"",
+									"pm.test('X-Request-ID presente', function () {",
+									"    pm.expect(pm.response.headers.get('X-Request-Id')).to.be.a('string').and.not.empty;",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"novo.agente@dev.local\",\n    \"password\": \"test1234\",\n    \"role\": \"user_n1\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/{{api_version}}/iam/users",
+							"host": ["{{base_url}}"],
+							"path": ["{{api_version}}", "iam", "users"]
+						},
+						"description": "Cria um novo usuario no tenant do autenticado.\n\n**Gerente:** cria user_n1 ou user_n2.\n**Sysadmin:** cria gerente em qualquer tenant (via X-Tenant-ID).\n\nO ID criado e salvo em `last_created_user_id`."
+					}
+				},
+				{
+					"name": "[PUT] Update User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status code 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Content-Type application/json', function () {",
+									"    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
+									"});",
+									"",
+									"pm.test('Response possui usuario atualizado', function () {",
+									"    const body = pm.response.json();",
+									"    pm.expect(body).to.have.property('id').that.is.a('string').and.not.empty;",
+									"    pm.expect(body).to.have.property('email').that.is.a('string');",
+									"    pm.expect(body).to.have.property('role').that.is.a('string');",
+									"});",
+									"",
+									"pm.test('X-Request-ID presente', function () {",
+									"    pm.expect(pm.response.headers.get('X-Request-Id')).to.be.a('string').and.not.empty;",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"agente.atualizado@dev.local\",\n    \"role\": \"user_n2\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/{{api_version}}/iam/users/{{last_created_user_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["{{api_version}}", "iam", "users", "{{last_created_user_id}}"]
+						},
+						"description": "Atualiza email, role ou status de um usuario.\n\nUsa `last_created_user_id` do Create anterior."
+					}
+				},
+				{
+					"name": "[DELETE] Deactivate User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status code 204', function () {",
+									"    pm.response.to.have.status(204);",
+									"});",
+									"",
+									"pm.test('X-Request-ID presente', function () {",
+									"    pm.expect(pm.response.headers.get('X-Request-Id')).to.be.a('string').and.not.empty;",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/{{api_version}}/iam/users/{{last_created_user_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["{{api_version}}", "iam", "users", "{{last_created_user_id}}"]
+						},
+						"description": "Desativa um usuario (soft delete).\n\nRetorna 204 No Content (sem body).\n\nUsa `last_created_user_id` do Create anterior."
+					}
+				}
+			]
 		}
 	]
 }
