@@ -1,9 +1,313 @@
 {
-  "info": {
-    "_postman_id": "da48ea39-d17f-4ff1-9886-de59e1b837ca",
-    "name": "WhatsApp GO API",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_exporter_id": "5400288"
-  },
-  "item": []
+	"info": {
+		"_postman_id": "da48ea39-d17f-4ff1-9886-de59e1b837ca",
+		"name": "WhatsApp GO API",
+		"description": "Collection completa da WhatsApp GO API SaaS.\n\n**Auto-login:** O pre-request script global faz login automatico se o access_token estiver vazio.\n\n**Idempotency:** Requests de mutacao (POST/PUT/PATCH/DELETE) recebem Idempotency-Key automaticamente.\n\n**Auth:** Bearer Token herdado da collection — nao precisa configurar por request.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "5400288"
+	},
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{access_token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"// === AUTO-LOGIN GLOBAL ===",
+					"// Se access_token estiver vazio e nao for o proprio request de login,",
+					"// faz login automatico com as credenciais do environment.",
+					"",
+					"const currentUrl = pm.request.url.toString();",
+					"const isLoginRequest = currentUrl.includes('/iam/login');",
+					"const isRefreshRequest = currentUrl.includes('/iam/refresh');",
+					"",
+					"if (!isLoginRequest && !isRefreshRequest) {",
+					"    const token = pm.environment.get('access_token');",
+					"    if (!token || token.trim() === '') {",
+					"        const baseUrl = pm.environment.get('base_url');",
+					"        const apiVersion = pm.environment.get('api_version');",
+					"        const email = pm.environment.get('auth_email');",
+					"        const password = pm.environment.get('auth_password');",
+					"",
+					"        if (email && password) {",
+					"            pm.sendRequest({",
+					"                url: baseUrl + '/' + apiVersion + '/iam/login',",
+					"                method: 'POST',",
+					"                header: { 'Content-Type': 'application/json' },",
+					"                body: {",
+					"                    mode: 'raw',",
+					"                    raw: JSON.stringify({ email: email, password: password })",
+					"                }",
+					"            }, function (err, res) {",
+					"                if (!err && res.code === 200) {",
+					"                    const body = res.json();",
+					"                    pm.environment.set('access_token', body.access_token);",
+					"                    pm.environment.set('refresh_token', body.refresh_token);",
+					"                    console.log('[Auto-Login] Token obtido para ' + email);",
+					"                } else {",
+					"                    console.warn('[Auto-Login] Falha: ' + (err || res.status));",
+					"                }",
+					"            });",
+					"        }",
+					"    }",
+					"}",
+					"",
+					"// === IDEMPOTENCY-KEY INJECTION ===",
+					"// Injeta header Idempotency-Key em requests de mutacao.",
+					"",
+					"const mutationMethods = ['POST', 'PUT', 'PATCH', 'DELETE'];",
+					"if (mutationMethods.includes(pm.request.method.toUpperCase())) {",
+					"    const uuid = require('uuid');",
+					"    const idempotencyKey = uuid.v4();",
+					"    pm.request.headers.add({",
+					"        key: 'Idempotency-Key',",
+					"        value: idempotencyKey",
+					"    });",
+					"    console.log('[Idempotency] Key: ' + idempotencyKey);",
+					"}"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"// === VALIDACOES GLOBAIS ===",
+					"",
+					"pm.test('Tempo de resposta < 2000ms', function () {",
+					"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+					"});"
+				]
+			}
+		}
+	],
+	"item": [
+		{
+			"name": "Auth",
+			"description": "Autenticacao: login, refresh, logout e perfil do usuario autenticado.",
+			"item": [
+				{
+					"name": "[POST] Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status code 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Content-Type application/json', function () {",
+									"    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
+									"});",
+									"",
+									"pm.test('Response possui access_token, refresh_token e token_type', function () {",
+									"    const body = pm.response.json();",
+									"    pm.expect(body).to.have.property('access_token').that.is.a('string').and.not.empty;",
+									"    pm.expect(body).to.have.property('refresh_token').that.is.a('string').and.not.empty;",
+									"    pm.expect(body).to.have.property('token_type', 'Bearer');",
+									"});",
+									"",
+									"pm.test('Salva tokens no environment', function () {",
+									"    const body = pm.response.json();",
+									"    pm.environment.set('access_token', body.access_token);",
+									"    pm.environment.set('refresh_token', body.refresh_token);",
+									"});",
+									"",
+									"pm.test('X-Request-ID presente', function () {",
+									"    pm.expect(pm.response.headers.get('X-Request-Id')).to.be.a('string').and.not.empty;",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"{{auth_email}}\",\n    \"password\": \"{{auth_password}}\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/{{api_version}}/iam/login",
+							"host": ["{{base_url}}"],
+							"path": ["{{api_version}}", "iam", "login"]
+						},
+						"description": "Autentica o usuario e retorna JWT access + refresh tokens.\n\n**Credenciais de teste:**\n- `gerente@dev.local` / `test1234` (role: gerente)\n- `agente1@dev.local` / `test1234` (role: user_n1)\n- `agente2@dev.local` / `test1234` (role: user_n2)"
+					}
+				},
+				{
+					"name": "[POST] Refresh Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status code 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Content-Type application/json', function () {",
+									"    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
+									"});",
+									"",
+									"pm.test('Response possui novos tokens', function () {",
+									"    const body = pm.response.json();",
+									"    pm.expect(body).to.have.property('access_token').that.is.a('string').and.not.empty;",
+									"    pm.expect(body).to.have.property('refresh_token').that.is.a('string').and.not.empty;",
+									"    pm.expect(body).to.have.property('token_type', 'Bearer');",
+									"});",
+									"",
+									"pm.test('Atualiza tokens no environment', function () {",
+									"    const body = pm.response.json();",
+									"    pm.environment.set('access_token', body.access_token);",
+									"    pm.environment.set('refresh_token', body.refresh_token);",
+									"});",
+									"",
+									"pm.test('X-Request-ID presente', function () {",
+									"    pm.expect(pm.response.headers.get('X-Request-Id')).to.be.a('string').and.not.empty;",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"refresh_token\": \"{{refresh_token}}\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/{{api_version}}/iam/refresh",
+							"host": ["{{base_url}}"],
+							"path": ["{{api_version}}", "iam", "refresh"]
+						},
+						"description": "Renova o access token usando o refresh token.\n\nO script de test atualiza automaticamente ambos os tokens no environment."
+					}
+				},
+				{
+					"name": "[POST] Logout",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status code 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Content-Type application/json', function () {",
+									"    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
+									"});",
+									"",
+									"pm.test('Response confirma logout', function () {",
+									"    const body = pm.response.json();",
+									"    pm.expect(body).to.have.property('message');",
+									"});",
+									"",
+									"pm.test('Limpa tokens do environment', function () {",
+									"    pm.environment.set('access_token', '');",
+									"    pm.environment.set('refresh_token', '');",
+									"});",
+									"",
+									"pm.test('X-Request-ID presente', function () {",
+									"    pm.expect(pm.response.headers.get('X-Request-Id')).to.be.a('string').and.not.empty;",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/{{api_version}}/iam/logout",
+							"host": ["{{base_url}}"],
+							"path": ["{{api_version}}", "iam", "logout"]
+						},
+						"description": "Invalida o access token atual (adiciona JTI a blacklist).\n\n**Requer:** Bearer Token (herdado da collection).\n\nO script de test limpa os tokens do environment apos o logout."
+					}
+				},
+				{
+					"name": "[GET] Me",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status code 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Content-Type application/json', function () {",
+									"    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
+									"});",
+									"",
+									"pm.test('Response possui estrutura de usuario', function () {",
+									"    const body = pm.response.json();",
+									"    pm.expect(body).to.have.property('id').that.is.a('string').and.not.empty;",
+									"    pm.expect(body).to.have.property('tenant_id').that.is.a('string').and.not.empty;",
+									"    pm.expect(body).to.have.property('email').that.is.a('string').and.not.empty;",
+									"    pm.expect(body).to.have.property('role').that.is.a('string');",
+									"    pm.expect(body).to.have.property('active').that.is.a('boolean');",
+									"});",
+									"",
+									"pm.test('Role e um valor valido', function () {",
+									"    const body = pm.response.json();",
+									"    const validRoles = ['sysadmin', 'gerente', 'user_n1', 'user_n2'];",
+									"    pm.expect(validRoles).to.include(body.role);",
+									"});",
+									"",
+									"pm.test('X-Request-ID presente', function () {",
+									"    pm.expect(pm.response.headers.get('X-Request-Id')).to.be.a('string').and.not.empty;",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/{{api_version}}/iam/me",
+							"host": ["{{base_url}}"],
+							"path": ["{{api_version}}", "iam", "me"]
+						},
+						"description": "Retorna o perfil do usuario autenticado.\n\n**Requer:** Bearer Token (herdado da collection).\n\n**Response:** id, tenant_id, email, role, active."
+					}
+				}
+			]
+		}
+	]
 }
