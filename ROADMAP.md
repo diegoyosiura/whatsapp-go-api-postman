@@ -5,12 +5,13 @@
 
 ---
 
-## Estado Atual: M2 Concluido — Tenants + Users
+## Estado Atual: M2.5 Concluido — Concierge Backoffice
 
-- Collection com 4 folders, 13 requests
-- Folders concluidas: [Concierge] Backoffice, Auth, Tenants, Users
+- Collection com 4 folders, 16 requests
+- Folders concluidas: [Concierge] Backoffice (4), Auth (4), Tenants (4), Users (4)
+- Workflow Concierge completo: Login → Create Tenant → Create Manager → Dashboard
 - Collection-level scripts: auto-login global + Idempotency-Key + response time
-- Variable chaining: last_created_tenant_id, last_created_user_id
+- Variable chaining: last_created_tenant_id, last_created_user_id, last_created_manager_id
 - Environment configurado com 10 variaveis (6 originais + 4 sysadmin)
 - Governance completa (5 rules, 1 workflow, 1 skill)
 
@@ -76,16 +77,16 @@
 | 2.1 | Folder Tenants | [POST] Create (sysadmin), [GET] List, [GET] Detail, [PUT] Update | CONCLUIDO |
 | 2.2 | Folder Users | [GET] List, [POST] Create, [PUT] Update, [DELETE] Deactivate | CONCLUIDO |
 
-### MILESTONE 2.5: Concierge Backoffice (4 requests)
+### MILESTONE 2.5: Concierge Backoffice (4 requests) ✓ CONCLUIDO (3ace1aa)
 
 **Referencia:** [SYSADMIN_BLUEPRINT.md](../SYSADMIN_BLUEPRINT.md)
 
 | # | Task | Descricao | Status |
 |---|------|-----------|--------|
-| 2.5.1 | Pasta [Concierge] Backoffice | Criar pasta com pre-request de auto-login sysadmin | PENDENTE |
-| 2.5.2 | Create Tenant request | [POST] Create Tenant + test script salva last_created_tenant_id | PENDENTE |
-| 2.5.3 | Create Manager request | [POST] Create Manager (gerente) com tenant_id dinamico | PENDENTE |
-| 2.5.4 | Dashboard Backoffice | [GET] /v1/backoffice/dashboard — metricas globais (sysadmin only) | PENDENTE |
+| 2.5.1 | Pasta [Concierge] Backoffice | Criar pasta com pre-request de auto-login sysadmin | CONCLUIDO (M1.5) |
+| 2.5.2 | Create Tenant request | [POST] Create Tenant + test script salva last_created_tenant_id | CONCLUIDO |
+| 2.5.3 | Create Manager request | [POST] Create Manager (gerente) com tenant_id dinamico | CONCLUIDO |
+| 2.5.4 | Dashboard Backoffice | [GET] /v1/backoffice/dashboard — metricas globais (sysadmin only) | CONCLUIDO |
 
 ### MILESTONE 3: WhatsApp (7 requests)
 
