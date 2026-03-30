@@ -2272,6 +2272,641 @@
 					]
 				}
 			]
+		},
+		{
+			"name": "Chat",
+			"description": "Conversas, mensagens, locks de atendimento e notas internas.",
+			"item": [
+				{
+					"name": "Conversations",
+					"description": "CRUD de conversas + atribuicao e transicao de status.",
+					"item": [
+						{
+							"name": "[GET] List Conversations",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											"pm.test('Status code 200', function () { pm.response.to.have.status(200); });",
+											"pm.test('Content-Type application/json', function () { pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json'); });",
+											"pm.test('Response possui data e total', function () { const b = pm.response.json(); pm.expect(b).to.have.property('data').that.is.an('array'); pm.expect(b).to.have.property('total').that.is.a('number'); });",
+											"pm.test('X-Request-ID presente', function () { pm.expect(pm.response.headers.get('X-Request-Id')).to.be.a('string').and.not.empty; });"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/{{api_version}}/chat/conversations?status=QUEUED",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"{{api_version}}",
+										"chat",
+										"conversations"
+									],
+									"query": [
+										{
+											"key": "status",
+											"value": "QUEUED"
+										}
+									]
+								},
+								"description": "Lista conversas do tenant.\n\nFiltros opcionais: status, assigned_user_id, contact_id."
+							}
+						},
+						{
+							"name": "[POST] Create Conversation",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											"pm.test('Status code 201', function () { pm.response.to.have.status(201); });",
+											"pm.test('Content-Type application/json', function () { pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json'); });",
+											"pm.test('Response possui conversa', function () { const b = pm.response.json(); pm.expect(b).to.have.property('id').that.is.a('string').and.not.empty; pm.expect(b).to.have.property('status').that.is.a('string'); pm.expect(b).to.have.property('origin'); });",
+											"pm.test('Salva conversation_id', function () { pm.environment.set('last_created_conversation_id', pm.response.json().id); });",
+											"pm.test('X-Request-ID presente', function () { pm.expect(pm.response.headers.get('X-Request-Id')).to.be.a('string').and.not.empty; });"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/{{api_version}}/chat/conversations",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"{{api_version}}",
+										"chat",
+										"conversations"
+									]
+								},
+								"description": "Cria conversa.\n\nSalva ID em `last_created_conversation_id`.",
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"waba_number_id\": \"{{last_created_waba_id}}\",\n    \"contact_id\": \"{{last_created_contact_id}}\",\n    \"origin\": \"INBOUND\",\n    \"subject\": \"Atendimento teste\",\n    \"priority\": 1,\n    \"tags\": [\"teste\"]\n}"
+								}
+							}
+						},
+						{
+							"name": "[GET] Get Conversation",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											"pm.test('Status code 200', function () { pm.response.to.have.status(200); });",
+											"pm.test('Content-Type application/json', function () { pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json'); });",
+											"pm.test('Response possui conversa', function () { const b = pm.response.json(); pm.expect(b).to.have.property('id'); pm.expect(b).to.have.property('status'); pm.expect(b).to.have.property('contact_id'); pm.expect(b).to.have.property('waba_number_id'); });",
+											"pm.test('X-Request-ID presente', function () { pm.expect(pm.response.headers.get('X-Request-Id')).to.be.a('string').and.not.empty; });"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/{{api_version}}/chat/conversations/{{last_created_conversation_id}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"{{api_version}}",
+										"chat",
+										"conversations",
+										"{{last_created_conversation_id}}"
+									]
+								},
+								"description": "Detalhe da conversa."
+							}
+						},
+						{
+							"name": "[PUT] Update Status",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											"pm.test('Status code 200', function () { pm.response.to.have.status(200); });",
+											"pm.test('Content-Type application/json', function () { pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json'); });",
+											"pm.test('Response confirma atualizacao', function () { const b = pm.response.json(); pm.expect(b).to.have.property('message'); });",
+											"pm.test('X-Request-ID presente', function () { pm.expect(pm.response.headers.get('X-Request-Id')).to.be.a('string').and.not.empty; });"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/{{api_version}}/chat/conversations/{{last_created_conversation_id}}/status",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"{{api_version}}",
+										"chat",
+										"conversations",
+										"{{last_created_conversation_id}}",
+										"status"
+									]
+								},
+								"description": "Transicao de status (maquina de 7 estados).\n\nStatuses: QUEUED, ASSIGNED, IN_PROGRESS, WAITING_CUSTOMER, TRANSFERRED, RESOLVED, CLOSED.",
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"status\": \"IN_PROGRESS\"\n}"
+								}
+							}
+						},
+						{
+							"name": "[POST] Assign",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											"pm.test('Status code 200', function () { pm.response.to.have.status(200); });",
+											"pm.test('Content-Type application/json', function () { pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json'); });",
+											"pm.test('Response confirma atribuicao', function () { const b = pm.response.json(); pm.expect(b).to.have.property('message'); });",
+											"pm.test('X-Request-ID presente', function () { pm.expect(pm.response.headers.get('X-Request-Id')).to.be.a('string').and.not.empty; });"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/{{api_version}}/chat/conversations/{{last_created_conversation_id}}/assign",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"{{api_version}}",
+										"chat",
+										"conversations",
+										"{{last_created_conversation_id}}",
+										"assign"
+									]
+								},
+								"description": "Atribui conversa a usuario ou grupo.\n\nuser_id e/ou group_id.",
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"user_id\": \"{{last_created_user_id}}\"\n}"
+								}
+							}
+						}
+					]
+				},
+				{
+					"name": "Messages",
+					"description": "Envio e listagem de mensagens. n1/n2 precisam de lock ativo para enviar.",
+					"item": [
+						{
+							"name": "[GET] List Messages",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											"pm.test('Status code 200', function () { pm.response.to.have.status(200); });",
+											"pm.test('Content-Type application/json', function () { pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json'); });",
+											"pm.test('Response possui data e total', function () { const b = pm.response.json(); pm.expect(b).to.have.property('data').that.is.an('array'); pm.expect(b).to.have.property('total').that.is.a('number'); });",
+											"pm.test('X-Request-ID presente', function () { pm.expect(pm.response.headers.get('X-Request-Id')).to.be.a('string').and.not.empty; });"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/{{api_version}}/chat/conversations/{{last_created_conversation_id}}/messages",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"{{api_version}}",
+										"chat",
+										"conversations",
+										"{{last_created_conversation_id}}",
+										"messages"
+									]
+								},
+								"description": "Timeline de mensagens da conversa."
+							}
+						},
+						{
+							"name": "[POST] Send Text",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											"pm.test('Status code 201', function () { pm.response.to.have.status(201); });",
+											"pm.test('Content-Type application/json', function () { pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json'); });",
+											"pm.test('Response possui mensagem', function () { const b = pm.response.json(); pm.expect(b).to.have.property('id').that.is.a('string').and.not.empty; pm.expect(b).to.have.property('direction'); pm.expect(b).to.have.property('body'); });",
+											"pm.test('Salva message_id', function () { pm.environment.set('last_created_message_id', pm.response.json().id); });",
+											"pm.test('X-Request-ID presente', function () { pm.expect(pm.response.headers.get('X-Request-Id')).to.be.a('string').and.not.empty; });"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/{{api_version}}/chat/conversations/{{last_created_conversation_id}}/messages",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"{{api_version}}",
+										"chat",
+										"conversations",
+										"{{last_created_conversation_id}}",
+										"messages"
+									]
+								},
+								"description": "Envia mensagem de texto.\n\nn1/n2 precisam de lock ativo.",
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"body\": \"Ola, como posso ajudar?\",\n    \"type\": \"text\"\n}"
+								}
+							}
+						},
+						{
+							"name": "[POST] Send Template",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											"pm.test('Status code 201', function () { pm.response.to.have.status(201); });",
+											"pm.test('Content-Type application/json', function () { pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json'); });",
+											"pm.test('Response possui mensagem template', function () { const b = pm.response.json(); pm.expect(b).to.have.property('id').that.is.a('string').and.not.empty; pm.expect(b).to.have.property('type'); });",
+											"pm.test('X-Request-ID presente', function () { pm.expect(pm.response.headers.get('X-Request-Id')).to.be.a('string').and.not.empty; });"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/{{api_version}}/chat/conversations/{{last_created_conversation_id}}/messages/template",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"{{api_version}}",
+										"chat",
+										"conversations",
+										"{{last_created_conversation_id}}",
+										"messages",
+										"template"
+									]
+								},
+								"description": "Envia mensagem HSM template.",
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"template_name\": \"hello_world\",\n    \"language\": \"pt_BR\",\n    \"components\": [\n        {\n            \"type\": \"body\",\n            \"parameters\": [\n                {\"type\": \"text\", \"text\": \"Joao\"}\n            ]\n        }\n    ]\n}"
+								}
+							}
+						},
+						{
+							"name": "[POST] Send Media",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											"pm.test('Status code 201', function () { pm.response.to.have.status(201); });",
+											"pm.test('Content-Type application/json', function () { pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json'); });",
+											"pm.test('Response possui mensagem media', function () { const b = pm.response.json(); pm.expect(b).to.have.property('id').that.is.a('string').and.not.empty; pm.expect(b).to.have.property('type'); });",
+											"pm.test('X-Request-ID presente', function () { pm.expect(pm.response.headers.get('X-Request-Id')).to.be.a('string').and.not.empty; });"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/{{api_version}}/chat/conversations/{{last_created_conversation_id}}/messages/media",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"{{api_version}}",
+										"chat",
+										"conversations",
+										"{{last_created_conversation_id}}",
+										"messages",
+										"media"
+									]
+								},
+								"description": "Envia mensagem com midia (imagem, video, audio, documento).",
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"type\": \"image\",\n    \"media_url\": \"https://example.com/photo.jpg\",\n    \"caption\": \"Foto do produto\"\n}"
+								}
+							}
+						}
+					]
+				},
+				{
+					"name": "Locks",
+					"description": "Claim/release de locks de atendimento. Lock TTL 30min, idempotente.",
+					"item": [
+						{
+							"name": "[POST] Claim Lock",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											"pm.test('Status code 200', function () { pm.response.to.have.status(200); });",
+											"pm.test('Content-Type application/json', function () { pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json'); });",
+											"pm.test('Response possui lock', function () { const b = pm.response.json(); pm.expect(b).to.have.property('id'); pm.expect(b).to.have.property('conversation_id'); pm.expect(b).to.have.property('locked_by_user_id'); pm.expect(b).to.have.property('expires_at'); });",
+											"pm.test('X-Request-ID presente', function () { pm.expect(pm.response.headers.get('X-Request-Id')).to.be.a('string').and.not.empty; });"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/{{api_version}}/chat/conversations/{{last_created_conversation_id}}/lock",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"{{api_version}}",
+										"chat",
+										"conversations",
+										"{{last_created_conversation_id}}",
+										"lock"
+									]
+								},
+								"description": "Claim lock de atendimento (TTL 30min, idempotente)."
+							}
+						},
+						{
+							"name": "[GET] Get Active Lock",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											"pm.test('Status code 200', function () { pm.response.to.have.status(200); });",
+											"pm.test('Content-Type application/json', function () { pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json'); });",
+											"pm.test('Response possui lock ou null', function () { const b = pm.response.json(); pm.expect(b).to.be.an('object'); });",
+											"pm.test('X-Request-ID presente', function () { pm.expect(pm.response.headers.get('X-Request-Id')).to.be.a('string').and.not.empty; });"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/{{api_version}}/chat/conversations/{{last_created_conversation_id}}/lock",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"{{api_version}}",
+										"chat",
+										"conversations",
+										"{{last_created_conversation_id}}",
+										"lock"
+									]
+								},
+								"description": "Retorna lock ativo da conversa."
+							}
+						},
+						{
+							"name": "[DELETE] Release Lock",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											"pm.test('Status code 204', function () { pm.response.to.have.status(204); });",
+											"pm.test('X-Request-ID presente', function () { pm.expect(pm.response.headers.get('X-Request-Id')).to.be.a('string').and.not.empty; });"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/{{api_version}}/chat/conversations/{{last_created_conversation_id}}/lock",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"{{api_version}}",
+										"chat",
+										"conversations",
+										"{{last_created_conversation_id}}",
+										"lock"
+									]
+								},
+								"description": "Libera lock. Retorna 204."
+							}
+						}
+					]
+				},
+				{
+					"name": "Notes",
+					"description": "Notas internas (whispers) na conversa.",
+					"item": [
+						{
+							"name": "[GET] List Notes",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											"pm.test('Status code 200', function () { pm.response.to.have.status(200); });",
+											"pm.test('Content-Type application/json', function () { pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json'); });",
+											"pm.test('Response possui data e total', function () { const b = pm.response.json(); pm.expect(b).to.have.property('data').that.is.an('array'); pm.expect(b).to.have.property('total').that.is.a('number'); });",
+											"pm.test('X-Request-ID presente', function () { pm.expect(pm.response.headers.get('X-Request-Id')).to.be.a('string').and.not.empty; });"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/{{api_version}}/chat/conversations/{{last_created_conversation_id}}/notes",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"{{api_version}}",
+										"chat",
+										"conversations",
+										"{{last_created_conversation_id}}",
+										"notes"
+									]
+								},
+								"description": "Lista notas internas da conversa."
+							}
+						},
+						{
+							"name": "[POST] Add Note",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											"pm.test('Status code 201', function () { pm.response.to.have.status(201); });",
+											"pm.test('Content-Type application/json', function () { pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json'); });",
+											"pm.test('Response possui nota', function () { const b = pm.response.json(); pm.expect(b).to.have.property('id').that.is.a('string').and.not.empty; pm.expect(b).to.have.property('body'); pm.expect(b).to.have.property('author_user_id'); });",
+											"pm.test('X-Request-ID presente', function () { pm.expect(pm.response.headers.get('X-Request-Id')).to.be.a('string').and.not.empty; });"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/{{api_version}}/chat/conversations/{{last_created_conversation_id}}/notes",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"{{api_version}}",
+										"chat",
+										"conversations",
+										"{{last_created_conversation_id}}",
+										"notes"
+									]
+								},
+								"description": "Cria nota interna com @mencoes opcionais.",
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"body\": \"Cliente VIP, priorizar atendimento @agente1\",\n    \"mentioned_user_ids\": []\n}"
+								}
+							}
+						}
+					]
+				},
+				{
+					"name": "Start",
+					"description": "Iniciar conversa outbound (ativa) com template obrigatorio.",
+					"item": [
+						{
+							"name": "[POST] Start Outbound",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											"pm.test('Status code 201', function () { pm.response.to.have.status(201); });",
+											"pm.test('Content-Type application/json', function () { pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json'); });",
+											"pm.test('Response possui conversation e first_message', function () { const b = pm.response.json(); pm.expect(b).to.have.property('conversation').that.is.an('object'); pm.expect(b).to.have.property('first_message').that.is.an('object'); pm.expect(b.conversation).to.have.property('id'); pm.expect(b.first_message).to.have.property('id'); });",
+											"pm.test('X-Request-ID presente', function () { pm.expect(pm.response.headers.get('X-Request-Id')).to.be.a('string').and.not.empty; });"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/{{api_version}}/chat/conversations/start",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"{{api_version}}",
+										"chat",
+										"conversations",
+										"start"
+									]
+								},
+								"description": "Inicia conversa ativa com template.\n\nCria conversa + envia primeira mensagem template.\n\nRetorna conversation + first_message.",
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"waba_number_id\": \"{{last_created_waba_id}}\",\n    \"contact_id\": \"{{last_created_contact_id}}\",\n    \"template_name\": \"hello_world\",\n    \"language\": \"pt_BR\",\n    \"components\": []\n}"
+								}
+							}
+						}
+					]
+				}
+			]
 		}
 	]
 }
