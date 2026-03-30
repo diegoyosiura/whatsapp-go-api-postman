@@ -25,3 +25,7 @@ dist-ssr
 
 # Agent workspace
 .agents/
+
+# Postman app local sync
+.postman/
+postman/
