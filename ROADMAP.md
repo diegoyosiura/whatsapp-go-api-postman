@@ -5,9 +5,9 @@
 
 ---
 
-## Estado Atual: M4 Concluido — CRM
+## Estado Atual: M5 Concluido — Chat
 
-- Collection com 6 folders, 43 requests
+- Collection com 7 folders, 58 requests
 - Folders concluidas: [Concierge] Backoffice (4), Auth (4), Tenants (4), Users (4), WhatsApp/WABA (5) + Webhook (2)
 - Workflow Concierge completo: Login → Create Tenant → Create Manager → Dashboard
 - Collection-level scripts: auto-login global + Idempotency-Key + response time
@@ -103,15 +103,15 @@
 | 4.2 | Folder Groups | [GET] List, [POST] Create, [GET] Detail, [PUT] Update, [DELETE] Delete, [POST] Add Member, [DELETE] Remove Member | CONCLUIDO |
 | 4.3 | Folder Portfolios | [GET] List, [POST] Create, [GET] Detail, [PUT] Update, [DELETE] Delete, [GET] List Contacts, [POST] Add Contact, [DELETE] Remove Contact | CONCLUIDO |
 
-### MILESTONE 5: Chat (15 requests)
+### MILESTONE 5: Chat (15 requests) ✓ CONCLUIDO (97c535c)
 
 | # | Task | Descricao | Status |
 |---|------|-----------|--------|
-| 5.1 | Folder Conversations | [GET] List, [POST] Create, [GET] Detail, [PUT] Update Status, [POST] Assign | PENDENTE |
-| 5.2 | Folder Messages | [GET] List, [POST] Send Text, [POST] Send Template, [POST] Send Media | PENDENTE |
-| 5.3 | Folder Locks | [POST] Claim Lock, [DELETE] Release Lock, [GET] Get Active Lock | PENDENTE |
-| 5.4 | Folder Notes | [GET] List, [POST] Add Note | PENDENTE |
-| 5.5 | Folder Start Conversation | [POST] Start Outbound (com template) | PENDENTE |
+| 5.1 | Folder Conversations | [GET] List, [POST] Create, [GET] Detail, [PUT] Update Status, [POST] Assign | CONCLUIDO |
+| 5.2 | Folder Messages | [GET] List, [POST] Send Text, [POST] Send Template, [POST] Send Media | CONCLUIDO |
+| 5.3 | Folder Locks | [POST] Claim Lock, [DELETE] Release Lock, [GET] Get Active Lock | CONCLUIDO |
+| 5.4 | Folder Notes | [GET] List, [POST] Add Note | CONCLUIDO |
+| 5.5 | Folder Start Conversation | [POST] Start Outbound (com template) | CONCLUIDO |
 
 ### MILESTONE 6: WebSocket (documentacao)
 
