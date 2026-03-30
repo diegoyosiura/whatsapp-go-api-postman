@@ -5,9 +5,11 @@
 
 ---
 
-## Estado Atual: Scaffold Vazio
+## Estado Atual: M1 Concluido — Auth
 
-- Collection criada (schema v2.1.0) — vazia
+- Collection com folder Auth (4 requests: Login, Refresh, Logout, Me)
+- Collection-level scripts: auto-login global + Idempotency-Key + response time
+- Bearer Token herdado por todos os requests
 - Environment configurado com 10 variaveis (6 originais + 4 sysadmin)
 - Governance completa (5 rules, 1 workflow, 1 skill)
 
@@ -49,12 +51,12 @@
 
 ## Tarefas Pendentes (por Milestone)
 
-### MILESTONE 1: Auth (4 requests)
+### MILESTONE 1: Auth (4 requests) ✓ CONCLUIDO (088c319)
 
 | # | Task | Descricao | Status |
 |---|------|-----------|--------|
-| 1.1 | Folder Auth | [POST] Login, [POST] Refresh Token, [POST] Logout, [GET] Me | PENDENTE |
-| 1.2 | Pre-request Scripts | Auto-login global + Idempotency-Key injection | PENDENTE |
+| 1.1 | Folder Auth | [POST] Login, [POST] Refresh Token, [POST] Logout, [GET] Me | CONCLUIDO |
+| 1.2 | Pre-request Scripts | Auto-login global + Idempotency-Key injection | CONCLUIDO |
 | 1.3 | RBAC Tests | Testes positivos + negativos (403) para cada endpoint protegido | PENDENTE |
 
 ### MILESTONE 1.5: Sysadmin Auth (1 request)
@@ -63,7 +65,7 @@
 
 | # | Task | Descricao | Status |
 |---|------|-----------|--------|
-| 1.5.1 | Env vars sysadmin | Adicionar sysadmin_email, sysadmin_password, sysadmin_access_token, sysadmin_refresh_token | PENDENTE |
+| 1.5.1 | Env vars sysadmin | Adicionar sysadmin_email, sysadmin_password, sysadmin_access_token, sysadmin_refresh_token | CONCLUIDO (e93857b) |
 | 1.5.2 | Login Sysadmin request | [POST] Login Sysadmin na pasta [Concierge] Backoffice | PENDENTE |
 
 ### MILESTONE 2: Tenants + Users (8 requests)
