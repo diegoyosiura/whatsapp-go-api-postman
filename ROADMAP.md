@@ -66,7 +66,7 @@
 | # | Task | Descricao | Status |
 |---|------|-----------|--------|
 | 1.5.1 | Env vars sysadmin | Adicionar sysadmin_email, sysadmin_password, sysadmin_access_token, sysadmin_refresh_token | CONCLUIDO (e93857b) |
-| 1.5.2 | Login Sysadmin request | [POST] Login Sysadmin na pasta [Concierge] Backoffice | PENDENTE |
+| 1.5.2 | Login Sysadmin request | [POST] Login Sysadmin na pasta [Concierge] Backoffice | CONCLUIDO (57e3846) |
 
 ### MILESTONE 2: Tenants + Users (8 requests)
 
