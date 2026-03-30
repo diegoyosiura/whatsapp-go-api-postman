@@ -208,8 +208,14 @@
 						},
 						"url": {
 							"raw": "{{base_url}}/{{api_version}}/iam/login",
-							"host": ["{{base_url}}"],
-							"path": ["{{api_version}}", "iam", "login"]
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{api_version}}",
+								"iam",
+								"login"
+							]
 						},
 						"description": "Autentica o sysadmin e salva tokens nas variaveis sysadmin_access_token / sysadmin_refresh_token.\n\nUsa o mesmo endpoint POST /v1/iam/login — o sysadmin e diferenciado pela role no JWT, nao pelo endpoint.\n\n**Credencial:** admin@sistema.local / env SYSADMIN_PASSWORD"
 					}
@@ -264,8 +270,13 @@
 						},
 						"url": {
 							"raw": "{{base_url}}/{{api_version}}/tenants",
-							"host": ["{{base_url}}"],
-							"path": ["{{api_version}}", "tenants"]
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{api_version}}",
+								"tenants"
+							]
 						},
 						"description": "**Workflow Concierge — Passo 1:** Cria o tenant.\n\nO ID e salvo em `last_created_tenant_id` para uso no passo seguinte (Create Manager)."
 					}
@@ -325,8 +336,14 @@
 						},
 						"url": {
 							"raw": "{{base_url}}/{{api_version}}/iam/users",
-							"host": ["{{base_url}}"],
-							"path": ["{{api_version}}", "iam", "users"]
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{api_version}}",
+								"iam",
+								"users"
+							]
 						},
 						"description": "**Workflow Concierge — Passo 2:** Cria o gerente inicial do tenant.\n\nUsa header `X-Tenant-ID` com o `last_created_tenant_id` do passo anterior.\nSo o sysadmin pode criar usuarios com role gerente.\n\nO ID e salvo em `last_created_manager_id`."
 					}
@@ -378,8 +395,14 @@
 						"header": [],
 						"url": {
 							"raw": "{{base_url}}/{{api_version}}/backoffice/dashboard",
-							"host": ["{{base_url}}"],
-							"path": ["{{api_version}}", "backoffice", "dashboard"]
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{api_version}}",
+								"backoffice",
+								"dashboard"
+							]
 						},
 						"description": "Metricas globais do backoffice (sysadmin only).\n\nRetorna total de tenants, conversas totais/abertas e breakdown por tenant."
 					}
@@ -443,8 +466,14 @@
 						},
 						"url": {
 							"raw": "{{base_url}}/{{api_version}}/iam/login",
-							"host": ["{{base_url}}"],
-							"path": ["{{api_version}}", "iam", "login"]
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{api_version}}",
+								"iam",
+								"login"
+							]
 						},
 						"description": "Autentica o usuario e retorna JWT access + refresh tokens.\n\n**Credenciais de teste:**\n- `gerente@dev.local` / `test1234` (role: gerente)\n- `agente1@dev.local` / `test1234` (role: user_n1)\n- `agente2@dev.local` / `test1234` (role: user_n2)"
 					}
@@ -502,8 +531,14 @@
 						},
 						"url": {
 							"raw": "{{base_url}}/{{api_version}}/iam/refresh",
-							"host": ["{{base_url}}"],
-							"path": ["{{api_version}}", "iam", "refresh"]
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{api_version}}",
+								"iam",
+								"refresh"
+							]
 						},
 						"description": "Renova o access token usando o refresh token.\n\nO script de test atualiza automaticamente ambos os tokens no environment."
 					}
@@ -546,8 +581,14 @@
 						"header": [],
 						"url": {
 							"raw": "{{base_url}}/{{api_version}}/iam/logout",
-							"host": ["{{base_url}}"],
-							"path": ["{{api_version}}", "iam", "logout"]
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{api_version}}",
+								"iam",
+								"logout"
+							]
 						},
 						"description": "Invalida o access token atual (adiciona JTI a blacklist).\n\n**Requer:** Bearer Token (herdado da collection).\n\nO script de test limpa os tokens do environment apos o logout."
 					}
@@ -595,8 +636,14 @@
 						"header": [],
 						"url": {
 							"raw": "{{base_url}}/{{api_version}}/iam/me",
-							"host": ["{{base_url}}"],
-							"path": ["{{api_version}}", "iam", "me"]
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{api_version}}",
+								"iam",
+								"me"
+							]
 						},
 						"description": "Retorna o perfil do usuario autenticado.\n\n**Requer:** Bearer Token (herdado da collection).\n\n**Response:** id, tenant_id, email, role, active."
 					}
@@ -700,8 +747,13 @@
 						},
 						"url": {
 							"raw": "{{base_url}}/{{api_version}}/tenants",
-							"host": ["{{base_url}}"],
-							"path": ["{{api_version}}", "tenants"]
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{api_version}}",
+								"tenants"
+							]
 						},
 						"description": "Cria um novo tenant (empresa gestora).\n\n**Sysadmin only.** O ID criado e salvo em `last_created_tenant_id`.\n\n**Plan types:** basic, pro, enterprise"
 					}
@@ -740,8 +792,13 @@
 						"header": [],
 						"url": {
 							"raw": "{{base_url}}/{{api_version}}/tenants",
-							"host": ["{{base_url}}"],
-							"path": ["{{api_version}}", "tenants"]
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{api_version}}",
+								"tenants"
+							]
 						},
 						"description": "Lista todos os tenants.\n\n**Sysadmin:** ve todos. **Gerente:** ve apenas o seu."
 					}
@@ -782,8 +839,14 @@
 						"header": [],
 						"url": {
 							"raw": "{{base_url}}/{{api_version}}/tenants/{{last_created_tenant_id}}",
-							"host": ["{{base_url}}"],
-							"path": ["{{api_version}}", "tenants", "{{last_created_tenant_id}}"]
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{api_version}}",
+								"tenants",
+								"{{last_created_tenant_id}}"
+							]
 						},
 						"description": "Retorna detalhe de um tenant.\n\nUsa `last_created_tenant_id` do Create anterior."
 					}
@@ -832,8 +895,14 @@
 						},
 						"url": {
 							"raw": "{{base_url}}/{{api_version}}/tenants/{{last_created_tenant_id}}",
-							"host": ["{{base_url}}"],
-							"path": ["{{api_version}}", "tenants", "{{last_created_tenant_id}}"]
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{api_version}}",
+								"tenants",
+								"{{last_created_tenant_id}}"
+							]
 						},
 						"description": "Atualiza um tenant existente.\n\n**Sysadmin only.** Nao pode modificar o tenant de sistema (plan_type=system)."
 					}
@@ -889,8 +958,14 @@
 						"header": [],
 						"url": {
 							"raw": "{{base_url}}/{{api_version}}/iam/users",
-							"host": ["{{base_url}}"],
-							"path": ["{{api_version}}", "iam", "users"]
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{api_version}}",
+								"iam",
+								"users"
+							]
 						},
 						"description": "Lista usuarios do tenant do usuario autenticado.\n\n**Requer:** gerente ou superior.\n\n**Sysadmin:** pode usar header X-Tenant-ID para ver usuarios de outro tenant."
 					}
@@ -945,8 +1020,14 @@
 						},
 						"url": {
 							"raw": "{{base_url}}/{{api_version}}/iam/users",
-							"host": ["{{base_url}}"],
-							"path": ["{{api_version}}", "iam", "users"]
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{api_version}}",
+								"iam",
+								"users"
+							]
 						},
 						"description": "Cria um novo usuario no tenant do autenticado.\n\n**Gerente:** cria user_n1 ou user_n2.\n**Sysadmin:** cria gerente em qualquer tenant (via X-Tenant-ID).\n\nO ID criado e salvo em `last_created_user_id`."
 					}
@@ -995,8 +1076,15 @@
 						},
 						"url": {
 							"raw": "{{base_url}}/{{api_version}}/iam/users/{{last_created_user_id}}",
-							"host": ["{{base_url}}"],
-							"path": ["{{api_version}}", "iam", "users", "{{last_created_user_id}}"]
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{api_version}}",
+								"iam",
+								"users",
+								"{{last_created_user_id}}"
+							]
 						},
 						"description": "Atualiza email, role ou status de um usuario.\n\nUsa `last_created_user_id` do Create anterior."
 					}
@@ -1025,8 +1113,15 @@
 						"header": [],
 						"url": {
 							"raw": "{{base_url}}/{{api_version}}/iam/users/{{last_created_user_id}}",
-							"host": ["{{base_url}}"],
-							"path": ["{{api_version}}", "iam", "users", "{{last_created_user_id}}"]
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"{{api_version}}",
+								"iam",
+								"users",
+								"{{last_created_user_id}}"
+							]
 						},
 						"description": "Desativa um usuario (soft delete).\n\nRetorna 204 No Content (sem body).\n\nUsa `last_created_user_id` do Create anterior."
 					}
@@ -1075,8 +1170,13 @@
 								"header": [],
 								"url": {
 									"raw": "{{base_url}}/{{api_version}}/waba",
-									"host": ["{{base_url}}"],
-									"path": ["{{api_version}}", "waba"]
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"{{api_version}}",
+										"waba"
+									]
 								},
 								"description": "Lista numeros WABA do tenant."
 							}
@@ -1132,8 +1232,13 @@
 								},
 								"url": {
 									"raw": "{{base_url}}/{{api_version}}/waba",
-									"host": ["{{base_url}}"],
-									"path": ["{{api_version}}", "waba"]
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"{{api_version}}",
+										"waba"
+									]
 								},
 								"description": "Cadastra um numero WABA.\n\n**access_token** e criptografado com AES-256-GCM antes de ser salvo.\n**webhook_secret** e usado para validar HMAC dos eventos da Meta.\n\nO ID e salvo em `last_created_waba_id`."
 							}
@@ -1174,8 +1279,14 @@
 								"header": [],
 								"url": {
 									"raw": "{{base_url}}/{{api_version}}/waba/{{last_created_waba_id}}",
-									"host": ["{{base_url}}"],
-									"path": ["{{api_version}}", "waba", "{{last_created_waba_id}}"]
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"{{api_version}}",
+										"waba",
+										"{{last_created_waba_id}}"
+									]
 								},
 								"description": "Detalhe de um numero WABA.\n\nUsa `last_created_waba_id` do Create anterior."
 							}
@@ -1224,8 +1335,14 @@
 								},
 								"url": {
 									"raw": "{{base_url}}/{{api_version}}/waba/{{last_created_waba_id}}",
-									"host": ["{{base_url}}"],
-									"path": ["{{api_version}}", "waba", "{{last_created_waba_id}}"]
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"{{api_version}}",
+										"waba",
+										"{{last_created_waba_id}}"
+									]
 								},
 								"description": "Atualiza display_name, access_token, webhook_secret ou status.\n\nSe access_token for enviado vazio, o token existente e mantido."
 							}
@@ -1254,8 +1371,14 @@
 								"header": [],
 								"url": {
 									"raw": "{{base_url}}/{{api_version}}/waba/{{last_created_waba_id}}",
-									"host": ["{{base_url}}"],
-									"path": ["{{api_version}}", "waba", "{{last_created_waba_id}}"]
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"{{api_version}}",
+										"waba",
+										"{{last_created_waba_id}}"
+									]
 								},
 								"description": "Desativa um numero WABA (soft delete).\n\nRetorna 204 No Content."
 							}
@@ -1296,8 +1419,14 @@
 								"header": [],
 								"url": {
 									"raw": "{{base_url}}/{{api_version}}/webhook/{{last_created_waba_id}}?hub.mode=subscribe&hub.verify_token=whsec_test_secret_123&hub.challenge=test_challenge_abc",
-									"host": ["{{base_url}}"],
-									"path": ["{{api_version}}", "webhook", "{{last_created_waba_id}}"],
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"{{api_version}}",
+										"webhook",
+										"{{last_created_waba_id}}"
+									],
 									"query": [
 										{
 											"key": "hub.mode",
@@ -1358,10 +1487,786 @@
 								},
 								"url": {
 									"raw": "{{base_url}}/{{api_version}}/webhook/{{last_created_waba_id}}",
-									"host": ["{{base_url}}"],
-									"path": ["{{api_version}}", "webhook", "{{last_created_waba_id}}"]
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"{{api_version}}",
+										"webhook",
+										"{{last_created_waba_id}}"
+									]
 								},
 								"description": "Recebe eventos da Meta (mensagens, status de entrega, etc).\n\n**Publico (sem JWT).** Autenticado via HMAC-SHA256 no header X-Hub-Signature-256.\n\n**Sempre retorna 200** — fire-and-forget para evitar retransmissoes da Meta.\n\n**Nota:** O X-Hub-Signature-256 neste request e um placeholder. Para testes reais, calcule HMAC-SHA256 do body com o webhook_secret."
+							}
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "CRM",
+			"description": "Gestao de contatos, grupos de agentes e carteiras de atendimento.",
+			"item": [
+				{
+					"name": "Contacts",
+					"description": "CRUD de contatos WhatsApp do tenant.",
+					"item": [
+						{
+							"name": "[GET] List Contacts",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											"pm.test('Status code 200', function () { pm.response.to.have.status(200); });",
+											"pm.test('Content-Type application/json', function () { pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json'); });",
+											"pm.test('Response possui data e total', function () { const b = pm.response.json(); pm.expect(b).to.have.property('data').that.is.an('array'); pm.expect(b).to.have.property('total').that.is.a('number'); });",
+											"pm.test('X-Request-ID presente', function () { pm.expect(pm.response.headers.get('X-Request-Id')).to.be.a('string').and.not.empty; });"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/{{api_version}}/crm/contacts",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"{{api_version}}",
+										"crm",
+										"contacts"
+									]
+								},
+								"description": "Lista contatos do tenant."
+							}
+						},
+						{
+							"name": "[POST] Create Contact",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											"pm.test('Status code 201', function () { pm.response.to.have.status(201); });",
+											"pm.test('Content-Type application/json', function () { pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json'); });",
+											"pm.test('Response possui estrutura de contato', function () { const b = pm.response.json(); pm.expect(b).to.have.property('id').that.is.a('string').and.not.empty; pm.expect(b).to.have.property('wa_id').that.is.a('string'); pm.expect(b).to.have.property('active', true); });",
+											"pm.test('Salva contact_id', function () { pm.environment.set('last_created_contact_id', pm.response.json().id); });",
+											"pm.test('X-Request-ID presente', function () { pm.expect(pm.response.headers.get('X-Request-Id')).to.be.a('string').and.not.empty; });"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/{{api_version}}/crm/contacts",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"{{api_version}}",
+										"crm",
+										"contacts"
+									]
+								},
+								"description": "Cria contato. wa_id obrigatorio (unico por tenant).\n\nSalva ID em `last_created_contact_id`.",
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"wa_id\": \"5511999990001\",\n    \"name\": \"Joao Silva\",\n    \"custom_name\": \"Joao VIP\",\n    \"email\": \"joao@email.com\",\n    \"company_name\": \"Silva & Cia\",\n    \"tags\": [\"vip\", \"sp\"]\n}"
+								}
+							}
+						},
+						{
+							"name": "[GET] Get Contact",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											"pm.test('Status code 200', function () { pm.response.to.have.status(200); });",
+											"pm.test('Content-Type application/json', function () { pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json'); });",
+											"pm.test('Response possui estrutura completa', function () { const b = pm.response.json(); pm.expect(b).to.have.property('id'); pm.expect(b).to.have.property('wa_id'); pm.expect(b).to.have.property('tags').that.is.an('array'); pm.expect(b).to.have.property('active').that.is.a('boolean'); });",
+											"pm.test('X-Request-ID presente', function () { pm.expect(pm.response.headers.get('X-Request-Id')).to.be.a('string').and.not.empty; });"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/{{api_version}}/crm/contacts/{{last_created_contact_id}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"{{api_version}}",
+										"crm",
+										"contacts",
+										"{{last_created_contact_id}}"
+									]
+								},
+								"description": "Detalhe do contato."
+							}
+						},
+						{
+							"name": "[PUT] Update Contact",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											"pm.test('Status code 200', function () { pm.response.to.have.status(200); });",
+											"pm.test('Content-Type application/json', function () { pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json'); });",
+											"pm.test('Response possui contato atualizado', function () { const b = pm.response.json(); pm.expect(b).to.have.property('id'); pm.expect(b).to.have.property('custom_name'); });",
+											"pm.test('X-Request-ID presente', function () { pm.expect(pm.response.headers.get('X-Request-Id')).to.be.a('string').and.not.empty; });"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/{{api_version}}/crm/contacts/{{last_created_contact_id}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"{{api_version}}",
+										"crm",
+										"contacts",
+										"{{last_created_contact_id}}"
+									]
+								},
+								"description": "Atualiza custom_name, email, company_name, document, tags.",
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"custom_name\": \"Joao Premium\",\n    \"tags\": [\"vip\", \"sp\", \"premium\"]\n}"
+								}
+							}
+						},
+						{
+							"name": "[DELETE] Deactivate Contact",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											"pm.test('Status code 204', function () { pm.response.to.have.status(204); });",
+											"pm.test('X-Request-ID presente', function () { pm.expect(pm.response.headers.get('X-Request-Id')).to.be.a('string').and.not.empty; });"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/{{api_version}}/crm/contacts/{{last_created_contact_id}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"{{api_version}}",
+										"crm",
+										"contacts",
+										"{{last_created_contact_id}}"
+									]
+								},
+								"description": "Desativa contato (soft delete). Retorna 204."
+							}
+						}
+					]
+				},
+				{
+					"name": "Groups",
+					"description": "CRUD de grupos de agentes + gestao de membros. Requer gerente+.",
+					"item": [
+						{
+							"name": "[GET] List Groups",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											"pm.test('Status code 200', function () { pm.response.to.have.status(200); });",
+											"pm.test('Content-Type application/json', function () { pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json'); });",
+											"pm.test('Response possui data e total', function () { const b = pm.response.json(); pm.expect(b).to.have.property('data').that.is.an('array'); pm.expect(b).to.have.property('total').that.is.a('number'); });",
+											"pm.test('X-Request-ID presente', function () { pm.expect(pm.response.headers.get('X-Request-Id')).to.be.a('string').and.not.empty; });"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/{{api_version}}/crm/groups",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"{{api_version}}",
+										"crm",
+										"groups"
+									]
+								},
+								"description": "Lista grupos de agentes do tenant."
+							}
+						},
+						{
+							"name": "[POST] Create Group",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											"pm.test('Status code 201', function () { pm.response.to.have.status(201); });",
+											"pm.test('Content-Type application/json', function () { pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json'); });",
+											"pm.test('Response possui estrutura de grupo', function () { const b = pm.response.json(); pm.expect(b).to.have.property('id').that.is.a('string').and.not.empty; pm.expect(b).to.have.property('name').that.is.a('string'); });",
+											"pm.test('Salva group_id', function () { pm.environment.set('last_created_group_id', pm.response.json().id); });",
+											"pm.test('X-Request-ID presente', function () { pm.expect(pm.response.headers.get('X-Request-Id')).to.be.a('string').and.not.empty; });"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/{{api_version}}/crm/groups",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"{{api_version}}",
+										"crm",
+										"groups"
+									]
+								},
+								"description": "Cria grupo. name obrigatorio.\n\nSalva ID em `last_created_group_id`.",
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Suporte N1\",\n    \"description\": \"Grupo de agentes nivel 1\"\n}"
+								}
+							}
+						},
+						{
+							"name": "[GET] Get Group",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											"pm.test('Status code 200', function () { pm.response.to.have.status(200); });",
+											"pm.test('Content-Type application/json', function () { pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json'); });",
+											"pm.test('Response possui grupo com membros', function () { const b = pm.response.json(); pm.expect(b).to.have.property('id'); pm.expect(b).to.have.property('name'); pm.expect(b).to.have.property('members').that.is.an('array'); });",
+											"pm.test('X-Request-ID presente', function () { pm.expect(pm.response.headers.get('X-Request-Id')).to.be.a('string').and.not.empty; });"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/{{api_version}}/crm/groups/{{last_created_group_id}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"{{api_version}}",
+										"crm",
+										"groups",
+										"{{last_created_group_id}}"
+									]
+								},
+								"description": "Detalhe do grupo com lista de membros."
+							}
+						},
+						{
+							"name": "[PUT] Update Group",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											"pm.test('Status code 200', function () { pm.response.to.have.status(200); });",
+											"pm.test('Content-Type application/json', function () { pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json'); });",
+											"pm.test('Response possui grupo atualizado', function () { const b = pm.response.json(); pm.expect(b).to.have.property('id'); pm.expect(b).to.have.property('name'); });",
+											"pm.test('X-Request-ID presente', function () { pm.expect(pm.response.headers.get('X-Request-Id')).to.be.a('string').and.not.empty; });"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/{{api_version}}/crm/groups/{{last_created_group_id}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"{{api_version}}",
+										"crm",
+										"groups",
+										"{{last_created_group_id}}"
+									]
+								},
+								"description": "Atualiza nome e descricao do grupo.",
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Suporte N1 - Atualizado\",\n    \"description\": \"Grupo atualizado\"\n}"
+								}
+							}
+						},
+						{
+							"name": "[POST] Add Member",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											"pm.test('Status code 200', function () { pm.response.to.have.status(200); });",
+											"pm.test('Content-Type application/json', function () { pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json'); });",
+											"pm.test('Response confirma adicao', function () { const b = pm.response.json(); pm.expect(b).to.have.property('message'); });",
+											"pm.test('X-Request-ID presente', function () { pm.expect(pm.response.headers.get('X-Request-Id')).to.be.a('string').and.not.empty; });"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/{{api_version}}/crm/groups/{{last_created_group_id}}/members",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"{{api_version}}",
+										"crm",
+										"groups",
+										"{{last_created_group_id}}",
+										"members"
+									]
+								},
+								"description": "Adiciona agente ao grupo.\n\nUsa `last_created_user_id`.",
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"user_id\": \"{{last_created_user_id}}\"\n}"
+								}
+							}
+						},
+						{
+							"name": "[DELETE] Remove Member",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											"pm.test('Status code 204', function () { pm.response.to.have.status(204); });",
+											"pm.test('X-Request-ID presente', function () { pm.expect(pm.response.headers.get('X-Request-Id')).to.be.a('string').and.not.empty; });"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/{{api_version}}/crm/groups/{{last_created_group_id}}/members/{{last_created_user_id}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"{{api_version}}",
+										"crm",
+										"groups",
+										"{{last_created_group_id}}",
+										"members",
+										"{{last_created_user_id}}"
+									]
+								},
+								"description": "Remove agente do grupo. Retorna 204."
+							}
+						},
+						{
+							"name": "[DELETE] Delete Group",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											"pm.test('Status code 204', function () { pm.response.to.have.status(204); });",
+											"pm.test('X-Request-ID presente', function () { pm.expect(pm.response.headers.get('X-Request-Id')).to.be.a('string').and.not.empty; });"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/{{api_version}}/crm/groups/{{last_created_group_id}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"{{api_version}}",
+										"crm",
+										"groups",
+										"{{last_created_group_id}}"
+									]
+								},
+								"description": "Remove grupo. Retorna 204."
+							}
+						}
+					]
+				},
+				{
+					"name": "Portfolios",
+					"description": "CRUD de carteiras + gestao de contatos. Requer gerente+.\n\nOwner: usuario XOR grupo (nunca ambos, nunca nenhum).",
+					"item": [
+						{
+							"name": "[GET] List Portfolios",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											"pm.test('Status code 200', function () { pm.response.to.have.status(200); });",
+											"pm.test('Content-Type application/json', function () { pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json'); });",
+											"pm.test('Response possui data e total', function () { const b = pm.response.json(); pm.expect(b).to.have.property('data').that.is.an('array'); pm.expect(b).to.have.property('total').that.is.a('number'); });",
+											"pm.test('X-Request-ID presente', function () { pm.expect(pm.response.headers.get('X-Request-Id')).to.be.a('string').and.not.empty; });"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/{{api_version}}/crm/portfolios",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"{{api_version}}",
+										"crm",
+										"portfolios"
+									]
+								},
+								"description": "Lista carteiras do tenant."
+							}
+						},
+						{
+							"name": "[POST] Create Portfolio",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											"pm.test('Status code 201', function () { pm.response.to.have.status(201); });",
+											"pm.test('Content-Type application/json', function () { pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json'); });",
+											"pm.test('Response possui estrutura de carteira', function () { const b = pm.response.json(); pm.expect(b).to.have.property('id').that.is.a('string').and.not.empty; pm.expect(b).to.have.property('name').that.is.a('string'); });",
+											"pm.test('Salva portfolio_id', function () { pm.environment.set('last_created_portfolio_id', pm.response.json().id); });",
+											"pm.test('X-Request-ID presente', function () { pm.expect(pm.response.headers.get('X-Request-Id')).to.be.a('string').and.not.empty; });"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/{{api_version}}/crm/portfolios",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"{{api_version}}",
+										"crm",
+										"portfolios"
+									]
+								},
+								"description": "Cria carteira com owner (user XOR group).\n\nSalva ID em `last_created_portfolio_id`.",
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Carteira Premium\",\n    \"owner_user_id\": \"{{last_created_user_id}}\"\n}"
+								}
+							}
+						},
+						{
+							"name": "[GET] Get Portfolio",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											"pm.test('Status code 200', function () { pm.response.to.have.status(200); });",
+											"pm.test('Content-Type application/json', function () { pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json'); });",
+											"pm.test('Response possui carteira', function () { const b = pm.response.json(); pm.expect(b).to.have.property('id'); pm.expect(b).to.have.property('name'); });",
+											"pm.test('X-Request-ID presente', function () { pm.expect(pm.response.headers.get('X-Request-Id')).to.be.a('string').and.not.empty; });"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/{{api_version}}/crm/portfolios/{{last_created_portfolio_id}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"{{api_version}}",
+										"crm",
+										"portfolios",
+										"{{last_created_portfolio_id}}"
+									]
+								},
+								"description": "Detalhe da carteira."
+							}
+						},
+						{
+							"name": "[PUT] Update Portfolio",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											"pm.test('Status code 200', function () { pm.response.to.have.status(200); });",
+											"pm.test('Content-Type application/json', function () { pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json'); });",
+											"pm.test('Response possui carteira atualizada', function () { const b = pm.response.json(); pm.expect(b).to.have.property('id'); pm.expect(b).to.have.property('name'); });",
+											"pm.test('X-Request-ID presente', function () { pm.expect(pm.response.headers.get('X-Request-Id')).to.be.a('string').and.not.empty; });"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/{{api_version}}/crm/portfolios/{{last_created_portfolio_id}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"{{api_version}}",
+										"crm",
+										"portfolios",
+										"{{last_created_portfolio_id}}"
+									]
+								},
+								"description": "Atualiza nome ou owner da carteira.",
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Carteira Premium Gold\"\n}"
+								}
+							}
+						},
+						{
+							"name": "[GET] List Portfolio Contacts",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											"pm.test('Status code 200', function () { pm.response.to.have.status(200); });",
+											"pm.test('Content-Type application/json', function () { pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json'); });",
+											"pm.test('Response possui data e total', function () { const b = pm.response.json(); pm.expect(b).to.have.property('data').that.is.an('array'); pm.expect(b).to.have.property('total').that.is.a('number'); });",
+											"pm.test('X-Request-ID presente', function () { pm.expect(pm.response.headers.get('X-Request-Id')).to.be.a('string').and.not.empty; });"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/{{api_version}}/crm/portfolios/{{last_created_portfolio_id}}/contacts",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"{{api_version}}",
+										"crm",
+										"portfolios",
+										"{{last_created_portfolio_id}}",
+										"contacts"
+									]
+								},
+								"description": "Lista contatos da carteira."
+							}
+						},
+						{
+							"name": "[POST] Add Contact",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											"pm.test('Status code 200', function () { pm.response.to.have.status(200); });",
+											"pm.test('Content-Type application/json', function () { pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json'); });",
+											"pm.test('Response confirma adicao', function () { const b = pm.response.json(); pm.expect(b).to.have.property('message'); });",
+											"pm.test('X-Request-ID presente', function () { pm.expect(pm.response.headers.get('X-Request-Id')).to.be.a('string').and.not.empty; });"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/{{api_version}}/crm/portfolios/{{last_created_portfolio_id}}/contacts",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"{{api_version}}",
+										"crm",
+										"portfolios",
+										"{{last_created_portfolio_id}}",
+										"contacts"
+									]
+								},
+								"description": "Adiciona contato a carteira.\n\nUsa `last_created_contact_id`.",
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"contact_id\": \"{{last_created_contact_id}}\"\n}"
+								}
+							}
+						},
+						{
+							"name": "[DELETE] Remove Contact",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											"pm.test('Status code 204', function () { pm.response.to.have.status(204); });",
+											"pm.test('X-Request-ID presente', function () { pm.expect(pm.response.headers.get('X-Request-Id')).to.be.a('string').and.not.empty; });"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/{{api_version}}/crm/portfolios/{{last_created_portfolio_id}}/contacts/{{last_created_contact_id}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"{{api_version}}",
+										"crm",
+										"portfolios",
+										"{{last_created_portfolio_id}}",
+										"contacts",
+										"{{last_created_contact_id}}"
+									]
+								},
+								"description": "Remove contato da carteira. Retorna 204."
+							}
+						},
+						{
+							"name": "[DELETE] Delete Portfolio",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											"pm.test('Status code 204', function () { pm.response.to.have.status(204); });",
+											"pm.test('X-Request-ID presente', function () { pm.expect(pm.response.headers.get('X-Request-Id')).to.be.a('string').and.not.empty; });"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/{{api_version}}/crm/portfolios/{{last_created_portfolio_id}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"{{api_version}}",
+										"crm",
+										"portfolios",
+										"{{last_created_portfolio_id}}"
+									]
+								},
+								"description": "Remove carteira. Retorna 204."
 							}
 						}
 					]
