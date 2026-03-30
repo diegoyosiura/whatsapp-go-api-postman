@@ -5,9 +5,9 @@
 
 ---
 
-## Estado Atual: M5 Concluido — Chat
+## Estado Atual: COLLECTION COMPLETA — Todas as rotas mapeadas
 
-- Collection com 7 folders, 58 requests
+- Collection com 10 folders, 75 requests cobrindo todas as 73 rotas da API
 - Folders concluidas: [Concierge] Backoffice (4), Auth (4), Tenants (4), Users (4), WhatsApp/WABA (5) + Webhook (2)
 - Workflow Concierge completo: Login → Create Tenant → Create Manager → Dashboard
 - Collection-level scripts: auto-login global + Idempotency-Key + response time
@@ -113,26 +113,26 @@
 | 5.4 | Folder Notes | [GET] List, [POST] Add Note | CONCLUIDO |
 | 5.5 | Folder Start Conversation | [POST] Start Outbound (com template) | CONCLUIDO |
 
-### MILESTONE 6: WebSocket (documentacao)
+### MILESTONE 6: WebSocket (documentacao) ✓ CONCLUIDO (3e4378c)
 
 | # | Task | Descricao | Status |
 |---|------|-----------|--------|
-| 6.1 | Folder WebSocket | Documentacao de referencia (nao executavel): eventos, payloads, handshake via GET /v1/ws?token={jwt} | PENDENTE |
+| 6.1 | Folder WebSocket | Documentacao de referencia (nao executavel): eventos, payloads, handshake via GET /v1/ws?token={jwt} | CONCLUIDO |
 
-### MILESTONE 7: Automation (15 requests)
-
-| # | Task | Descricao | Status |
-|---|------|-----------|--------|
-| 7.1 | Folder Quick Replies | [GET] List, [POST] Create, [GET] Detail, [PUT] Update, [DELETE] Remove | PENDENTE |
-| 7.2 | Folder SLA Configs | [GET] List, [POST] Create, [GET] Detail, [PUT] Update, [DELETE] Remove | PENDENTE |
-| 7.3 | Folder Routing Rules | [GET] List, [POST] Create, [GET] Detail, [PUT] Update, [DELETE] Remove | PENDENTE |
-
-### MILESTONE 9: Dashboard (2 requests)
+### MILESTONE 7: Automation (15 requests) ✓ CONCLUIDO (3e4378c)
 
 | # | Task | Descricao | Status |
 |---|------|-----------|--------|
-| 9.1 | Folder Dashboard | [GET] Tenant Metrics (/v1/dashboard/metrics?period=7d) | PENDENTE |
-| 9.2 | Backoffice Dashboard | [GET] Global Metrics (/v1/backoffice/dashboard) — sysadmin only | PENDENTE |
+| 7.1 | Folder Quick Replies | [GET] List, [POST] Create, [GET] Detail, [PUT] Update, [DELETE] Remove | CONCLUIDO |
+| 7.2 | Folder SLA Configs | [GET] List, [POST] Create, [GET] Detail, [PUT] Update, [DELETE] Remove | CONCLUIDO |
+| 7.3 | Folder Routing Rules | [GET] List, [POST] Create, [GET] Detail, [PUT] Update, [DELETE] Remove | CONCLUIDO |
+
+### MILESTONE 9: Dashboard (2 requests) ✓ CONCLUIDO (3e4378c)
+
+| # | Task | Descricao | Status |
+|---|------|-----------|--------|
+| 9.1 | Folder Dashboard | [GET] Tenant Metrics (/v1/dashboard/metrics?period=7d) | CONCLUIDO |
+| 9.2 | Backoffice Dashboard | [GET] Global Metrics (/v1/backoffice/dashboard) — sysadmin only | CONCLUIDO (M2.5) |
 
 ### MILESTONE 10: CI
 
