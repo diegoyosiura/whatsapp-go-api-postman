@@ -1032,6 +1032,341 @@
 					}
 				}
 			]
+		},
+		{
+			"name": "WhatsApp",
+			"description": "Gestao de numeros WABA e webhooks da Meta.",
+			"item": [
+				{
+					"name": "WABA Numbers",
+					"description": "CRUD de numeros WhatsApp Business API. Requer gerente ou superior.",
+					"item": [
+						{
+							"name": "[GET] List Numbers",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											"pm.test('Status code 200', function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test('Content-Type application/json', function () {",
+											"    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
+											"});",
+											"",
+											"pm.test('Response possui data array e total', function () {",
+											"    const body = pm.response.json();",
+											"    pm.expect(body).to.have.property('data').that.is.an('array');",
+											"    pm.expect(body).to.have.property('total').that.is.a('number');",
+											"});",
+											"",
+											"pm.test('X-Request-ID presente', function () {",
+											"    pm.expect(pm.response.headers.get('X-Request-Id')).to.be.a('string').and.not.empty;",
+											"});"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/{{api_version}}/waba",
+									"host": ["{{base_url}}"],
+									"path": ["{{api_version}}", "waba"]
+								},
+								"description": "Lista numeros WABA do tenant."
+							}
+						},
+						{
+							"name": "[POST] Create Number",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											"pm.test('Status code 201', function () {",
+											"    pm.response.to.have.status(201);",
+											"});",
+											"",
+											"pm.test('Content-Type application/json', function () {",
+											"    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
+											"});",
+											"",
+											"pm.test('Response possui estrutura WABA', function () {",
+											"    const body = pm.response.json();",
+											"    pm.expect(body).to.have.property('id').that.is.a('string').and.not.empty;",
+											"    pm.expect(body).to.have.property('waba_id').that.is.a('string');",
+											"    pm.expect(body).to.have.property('phone_number_id').that.is.a('string');",
+											"    pm.expect(body).to.have.property('display_number').that.is.a('string');",
+											"    pm.expect(body).to.have.property('active', true);",
+											"});",
+											"",
+											"pm.test('Salva waba_id criado', function () {",
+											"    const body = pm.response.json();",
+											"    pm.environment.set('last_created_waba_id', body.id);",
+											"});",
+											"",
+											"pm.test('X-Request-ID presente', function () {",
+											"    pm.expect(pm.response.headers.get('X-Request-Id')).to.be.a('string').and.not.empty;",
+											"});"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"waba_id\": \"123456789\",\n    \"phone_number_id\": \"987654321\",\n    \"display_number\": \"+55 11 99999-0000\",\n    \"display_name\": \"Atendimento Principal\",\n    \"access_token\": \"EAAxxxxxxx_placeholder\",\n    \"webhook_secret\": \"whsec_test_secret_123\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/{{api_version}}/waba",
+									"host": ["{{base_url}}"],
+									"path": ["{{api_version}}", "waba"]
+								},
+								"description": "Cadastra um numero WABA.\n\n**access_token** e criptografado com AES-256-GCM antes de ser salvo.\n**webhook_secret** e usado para validar HMAC dos eventos da Meta.\n\nO ID e salvo em `last_created_waba_id`."
+							}
+						},
+						{
+							"name": "[GET] Get Number",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											"pm.test('Status code 200', function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test('Content-Type application/json', function () {",
+											"    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
+											"});",
+											"",
+											"pm.test('Response possui estrutura WABA', function () {",
+											"    const body = pm.response.json();",
+											"    pm.expect(body).to.have.property('id').that.is.a('string').and.not.empty;",
+											"    pm.expect(body).to.have.property('waba_id');",
+											"    pm.expect(body).to.have.property('display_number');",
+											"    pm.expect(body).to.have.property('active').that.is.a('boolean');",
+											"});",
+											"",
+											"pm.test('X-Request-ID presente', function () {",
+											"    pm.expect(pm.response.headers.get('X-Request-Id')).to.be.a('string').and.not.empty;",
+											"});"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/{{api_version}}/waba/{{last_created_waba_id}}",
+									"host": ["{{base_url}}"],
+									"path": ["{{api_version}}", "waba", "{{last_created_waba_id}}"]
+								},
+								"description": "Detalhe de um numero WABA.\n\nUsa `last_created_waba_id` do Create anterior."
+							}
+						},
+						{
+							"name": "[PUT] Update Number",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											"pm.test('Status code 200', function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test('Content-Type application/json', function () {",
+											"    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
+											"});",
+											"",
+											"pm.test('Response possui WABA atualizado', function () {",
+											"    const body = pm.response.json();",
+											"    pm.expect(body).to.have.property('id').that.is.a('string').and.not.empty;",
+											"    pm.expect(body).to.have.property('display_name');",
+											"    pm.expect(body).to.have.property('active').that.is.a('boolean');",
+											"});",
+											"",
+											"pm.test('X-Request-ID presente', function () {",
+											"    pm.expect(pm.response.headers.get('X-Request-Id')).to.be.a('string').and.not.empty;",
+											"});"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"display_name\": \"Atendimento Atualizado\",\n    \"webhook_secret\": \"whsec_new_secret_456\"\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/{{api_version}}/waba/{{last_created_waba_id}}",
+									"host": ["{{base_url}}"],
+									"path": ["{{api_version}}", "waba", "{{last_created_waba_id}}"]
+								},
+								"description": "Atualiza display_name, access_token, webhook_secret ou status.\n\nSe access_token for enviado vazio, o token existente e mantido."
+							}
+						},
+						{
+							"name": "[DELETE] Deactivate Number",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											"pm.test('Status code 204', function () {",
+											"    pm.response.to.have.status(204);",
+											"});",
+											"",
+											"pm.test('X-Request-ID presente', function () {",
+											"    pm.expect(pm.response.headers.get('X-Request-Id')).to.be.a('string').and.not.empty;",
+											"});"
+										]
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/{{api_version}}/waba/{{last_created_waba_id}}",
+									"host": ["{{base_url}}"],
+									"path": ["{{api_version}}", "waba", "{{last_created_waba_id}}"]
+								},
+								"description": "Desativa um numero WABA (soft delete).\n\nRetorna 204 No Content."
+							}
+						}
+					]
+				},
+				{
+					"name": "Webhook",
+					"description": "Endpoints publicos chamados pela Meta para verificacao e recebimento de eventos.\n\nNao requerem JWT — autenticacao via HMAC-SHA256.",
+					"item": [
+						{
+							"name": "[GET] Verify Endpoint",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											"pm.test('Status code 200', function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test('Response ecoa o challenge', function () {",
+											"    const challenge = pm.request.url.query.get('hub.challenge');",
+											"    if (challenge) {",
+											"        pm.expect(pm.response.text()).to.include(challenge);",
+											"    }",
+											"});"
+										]
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/{{api_version}}/webhook/{{last_created_waba_id}}?hub.mode=subscribe&hub.verify_token=whsec_test_secret_123&hub.challenge=test_challenge_abc",
+									"host": ["{{base_url}}"],
+									"path": ["{{api_version}}", "webhook", "{{last_created_waba_id}}"],
+									"query": [
+										{
+											"key": "hub.mode",
+											"value": "subscribe"
+										},
+										{
+											"key": "hub.verify_token",
+											"value": "whsec_test_secret_123"
+										},
+										{
+											"key": "hub.challenge",
+											"value": "test_challenge_abc"
+										}
+									]
+								},
+								"description": "Endpoint de verificacao chamado pela Meta ao registrar o webhook.\n\n**Publico (sem JWT).** A Meta envia hub.mode, hub.verify_token e hub.challenge. O servidor valida o token e ecoa o challenge.\n\n**hub.verify_token** deve corresponder ao webhook_secret configurado no numero WABA."
+							}
+						},
+						{
+							"name": "[POST] Receive Event",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											"pm.test('Status code 200', function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test('Servidor sempre aceita (fire-and-forget)', function () {",
+											"    // Meta espera 200 para nao reenviar",
+											"    pm.expect(pm.response.code).to.equal(200);",
+											"});"
+										]
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "X-Hub-Signature-256",
+										"value": "sha256=placeholder_hmac_signature",
+										"description": "HMAC-SHA256 do body usando webhook_secret. Placeholder — precisa ser calculado para testes reais."
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"object\": \"whatsapp_business_account\",\n    \"entry\": [\n        {\n            \"id\": \"123456789\",\n            \"changes\": [\n                {\n                    \"value\": {\n                        \"messaging_product\": \"whatsapp\",\n                        \"metadata\": {\n                            \"display_phone_number\": \"+5511999990000\",\n                            \"phone_number_id\": \"987654321\"\n                        },\n                        \"messages\": [\n                            {\n                                \"from\": \"5511888880000\",\n                                \"id\": \"wamid.test123\",\n                                \"timestamp\": \"1234567890\",\n                                \"text\": { \"body\": \"Ola, preciso de ajuda\" },\n                                \"type\": \"text\"\n                            }\n                        ]\n                    },\n                    \"field\": \"messages\"\n                }\n            ]\n        }\n    ]\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/{{api_version}}/webhook/{{last_created_waba_id}}",
+									"host": ["{{base_url}}"],
+									"path": ["{{api_version}}", "webhook", "{{last_created_waba_id}}"]
+								},
+								"description": "Recebe eventos da Meta (mensagens, status de entrega, etc).\n\n**Publico (sem JWT).** Autenticado via HMAC-SHA256 no header X-Hub-Signature-256.\n\n**Sempre retorna 200** — fire-and-forget para evitar retransmissoes da Meta.\n\n**Nota:** O X-Hub-Signature-256 neste request e um placeholder. Para testes reais, calcule HMAC-SHA256 do body com o webhook_secret."
+							}
+						}
+					]
+				}
+			]
 		}
 	]
 }
