@@ -5,9 +5,9 @@
 
 ---
 
-## Estado Atual: M3 Concluido — WhatsApp
+## Estado Atual: M4 Concluido — CRM
 
-- Collection com 5 folders (1 com subfolders), 23 requests
+- Collection com 6 folders, 43 requests
 - Folders concluidas: [Concierge] Backoffice (4), Auth (4), Tenants (4), Users (4), WhatsApp/WABA (5) + Webhook (2)
 - Workflow Concierge completo: Login → Create Tenant → Create Manager → Dashboard
 - Collection-level scripts: auto-login global + Idempotency-Key + response time
@@ -95,13 +95,13 @@
 | 3.1 | Folder WABA Numbers | [GET] List, [POST] Create, [GET] Detail, [PUT] Update, [DELETE] Deactivate | CONCLUIDO |
 | 3.2 | Folder Webhook | [GET] Verification (Meta challenge), [POST] Receive Event (HMAC) | CONCLUIDO |
 
-### MILESTONE 4: CRM (20 requests)
+### MILESTONE 4: CRM (20 requests) ✓ CONCLUIDO (8a0dbaa)
 
 | # | Task | Descricao | Status |
 |---|------|-----------|--------|
-| 4.1 | Folder Contacts | [GET] List, [POST] Create, [GET] Detail, [PUT] Update, [DELETE] Deactivate | PENDENTE |
-| 4.2 | Folder Groups | [GET] List, [POST] Create, [GET] Detail, [PUT] Update, [DELETE] Delete, [POST] Add Member, [DELETE] Remove Member | PENDENTE |
-| 4.3 | Folder Portfolios | [GET] List, [POST] Create, [GET] Detail, [PUT] Update, [DELETE] Delete, [GET] List Contacts, [POST] Add Contact, [DELETE] Remove Contact | PENDENTE |
+| 4.1 | Folder Contacts | [GET] List, [POST] Create, [GET] Detail, [PUT] Update, [DELETE] Deactivate | CONCLUIDO |
+| 4.2 | Folder Groups | [GET] List, [POST] Create, [GET] Detail, [PUT] Update, [DELETE] Delete, [POST] Add Member, [DELETE] Remove Member | CONCLUIDO |
+| 4.3 | Folder Portfolios | [GET] List, [POST] Create, [GET] Detail, [PUT] Update, [DELETE] Delete, [GET] List Contacts, [POST] Add Contact, [DELETE] Remove Contact | CONCLUIDO |
 
 ### MILESTONE 5: Chat (15 requests)
 
