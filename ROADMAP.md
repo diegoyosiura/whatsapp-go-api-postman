@@ -5,13 +5,13 @@
 
 ---
 
-## Estado Atual: M2.5 Concluido — Concierge Backoffice
+## Estado Atual: M3 Concluido — WhatsApp
 
-- Collection com 4 folders, 16 requests
-- Folders concluidas: [Concierge] Backoffice (4), Auth (4), Tenants (4), Users (4)
+- Collection com 5 folders (1 com subfolders), 23 requests
+- Folders concluidas: [Concierge] Backoffice (4), Auth (4), Tenants (4), Users (4), WhatsApp/WABA (5) + Webhook (2)
 - Workflow Concierge completo: Login → Create Tenant → Create Manager → Dashboard
 - Collection-level scripts: auto-login global + Idempotency-Key + response time
-- Variable chaining: last_created_tenant_id, last_created_user_id, last_created_manager_id
+- Variable chaining: last_created_tenant_id, last_created_user_id, last_created_manager_id, last_created_waba_id
 - Environment configurado com 10 variaveis (6 originais + 4 sysadmin)
 - Governance completa (5 rules, 1 workflow, 1 skill)
 
@@ -88,12 +88,12 @@
 | 2.5.3 | Create Manager request | [POST] Create Manager (gerente) com tenant_id dinamico | CONCLUIDO |
 | 2.5.4 | Dashboard Backoffice | [GET] /v1/backoffice/dashboard — metricas globais (sysadmin only) | CONCLUIDO |
 
-### MILESTONE 3: WhatsApp (7 requests)
+### MILESTONE 3: WhatsApp (7 requests) ✓ CONCLUIDO (24c2617)
 
 | # | Task | Descricao | Status |
 |---|------|-----------|--------|
-| 3.1 | Folder WABA Numbers | [GET] List, [POST] Create, [GET] Detail, [PUT] Update, [DELETE] Deactivate | PENDENTE |
-| 3.2 | Folder Webhook | [GET] Verification (Meta challenge), [POST] Receive Event (HMAC) | PENDENTE |
+| 3.1 | Folder WABA Numbers | [GET] List, [POST] Create, [GET] Detail, [PUT] Update, [DELETE] Deactivate | CONCLUIDO |
+| 3.2 | Folder Webhook | [GET] Verification (Meta challenge), [POST] Receive Event (HMAC) | CONCLUIDO |
 
 ### MILESTONE 4: CRM (20 requests)
 
