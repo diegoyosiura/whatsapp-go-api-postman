@@ -26,6 +26,5 @@ dist-ssr
 # Agent workspace
 .agents/
 
-# Postman app local sync
-.postman/
+# Postman app local cache (collections/environments mirrors)
 postman/

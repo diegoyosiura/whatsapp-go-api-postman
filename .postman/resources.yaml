@@ -1,0 +1,9 @@
+# Use this workspace to collaborate
+workspace:
+  id: c2c14045-fbc6-4500-84e6-9fdeee23f4af
+
+localResources:
+  collections:
+    - ../WhatsApp GO API.postman_collection.json
+  environments:
+    - ../WhatsApp GO API.postman_environment.json

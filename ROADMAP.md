@@ -13,7 +13,8 @@
 - Collection-level scripts: auto-login global + Idempotency-Key + response time
 - Variable chaining: last_created_tenant_id, last_created_user_id, last_created_manager_id, last_created_waba_id
 - Environment configurado com 10 variaveis (6 originais + 4 sysadmin)
-- Governance completa (5 rules, 1 workflow, 1 skill)
+- **Postman Git Sync habilitado** — edicoes no Postman app alteram JSONs direto no repo (bidirecional)
+- Governance completa (6 rules, 1 workflow, 1 skill)
 
 ---
 
