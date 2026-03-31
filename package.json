@@ -1,0 +1,24 @@
+{
+  "name": "whatsapp-go-api-postman",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "newman run 'WhatsApp GO API.postman_collection.json' -e 'WhatsApp GO API.postman_environment.json' --reporters cli,htmlextra --reporter-htmlextra-export reports/report.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/diegoyosiura/whatsapp-go-api-postman.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/diegoyosiura/whatsapp-go-api-postman/issues"
+  },
+  "homepage": "https://github.com/diegoyosiura/whatsapp-go-api-postman#readme",
+  "devDependencies": {
+    "newman": "^6.2.2",
+    "newman-reporter-htmlextra": "^1.23.1"
+  }
+}
