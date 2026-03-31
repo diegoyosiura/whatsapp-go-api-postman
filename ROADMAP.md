@@ -146,7 +146,7 @@
 
 | # | Task | Descricao | Status |
 |---|------|-----------|--------|
-| 12.1 | Newman CI | npm script + package.json para rodar collection | PENDENTE |
+| 12.1 | Newman CI | npm test = newman run + htmlextra reporter | CONCLUIDO |
 
 ---
 
