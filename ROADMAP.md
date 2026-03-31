@@ -135,11 +135,18 @@
 | 9.1 | Folder Dashboard | [GET] Tenant Metrics (/v1/dashboard/metrics?period=7d) | CONCLUIDO |
 | 9.2 | Backoffice Dashboard | [GET] Global Metrics (/v1/backoffice/dashboard) — sysadmin only | CONCLUIDO (M2.5) |
 
-### MILESTONE 10: CI
+### MILESTONE 11: Templates + Health (7 requests) ✓ CONCLUIDO (08165a3)
 
 | # | Task | Descricao | Status |
 |---|------|-----------|--------|
-| 10.1 | Newman CI | GitHub Action para rodar collection contra API | PENDENTE |
+| 11.1 | Folder Templates | List, Create, Get, Update, Delete /v1/templates | CONCLUIDO |
+| 11.2 | Folder Health | GET /health + GET /ready | CONCLUIDO |
+
+### MILESTONE 12: Newman CI
+
+| # | Task | Descricao | Status |
+|---|------|-----------|--------|
+| 12.1 | Newman CI | npm script + package.json para rodar collection | PENDENTE |
 
 ---
 
